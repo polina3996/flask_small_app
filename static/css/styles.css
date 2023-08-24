@@ -1,0 +1,39 @@
+body {
+    background-color:bisque;
+    }
+
+h1.review {
+    color:sienna;
+    text-align:center;
+    background-color: burlywood;
+    }
+
+h1.restaurant {
+    color:DarkRed;
+    text-align:center;
+    font-family:Verdana;
+    font-size:50px;
+    }
+
+table.review {
+    width:100%;
+    cellspacing:0;
+    cellpadding:4;
+    }
+
+th {
+    font-size:40px;
+    color:chocolate;
+    text-align:center;
+    width:100%;
+    }
+
+td.review {
+    width:400px;
+    height:250px;
+    align:center;
+      }
+
+p.footer {
+    color:maroon;
+    }
