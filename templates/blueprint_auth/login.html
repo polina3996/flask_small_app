@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}"/>
+        <title>Авторизация</title>
+        <meta name='Авторизация' content='вход пользователя'>
+    </head>
+    <body>
+    {%- block mainmenu -%}
+      <ul>
+        {% for m in NAUmenu -%}
+        <li><a href="{{m.url}}">{{m.name}}</a></li>
+        {% endfor -%}
+      </ul>
+      {% endblock mainmenu -%}
+        <header><h1 class="login">Авторизация</h1>
+        <main>
+            {% for cat, msg in get_flashed_messages(True) %}
+                <div class="flash {{cat}}">{{msg}}</div>
+            {% endfor %}
+
+            <form action="" method="post" class="form-contact">
+                {{ form.hidden_tag() }}
+
+                {% for field in form if field.name not in ['csrf_token', 'remember', 'submit'] -%}
+                    <p> {{ field.label() }}
+                    {% if field.errors %}
+                        {{ field(class="invalid") }}
+                        <span class="invalid-feedback">
+                        {% for e in field.errors %}
+                            {{ e }}
+                        {% endfor %}
+                        </span>
+                    {% else %}
+                        {{ field() }}
+                    {% endif %}
+                {% endfor %}
+
+                <p> {{ form.remember.label() }} {{ form.remember()  }}
+                <p> {{ form.submit() }}
+                <hr>
+                <p>Ещё не <a href="{{url_for('blueprint_auth.register')}}">зарегистрированы?</a>
+            </form>
+            {% endblock %}
+        </main>
+        <footer>
+            <p class="footer">Автор: Полина Кириченко</p>
+        </footer>
+     </body>
+</html>

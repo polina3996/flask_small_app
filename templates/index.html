@@ -5,8 +5,21 @@
         <meta name='Рестораны Батуми' content='обзор ресторанов'>
     </head>
     <body>
+    {%- block mainmenu -%}
+      <ul>
+          {% if g.user % }
+            {% for m in NAUmenu -%}
+                <li><a href="{{m.url}}">{{m.name}}</a></li>
+            {% endfor -%}
+          {% else %}
+            {% for m in AUmenu -%}
+                <li><a href="{{m.url}}">{{m.name}}</a></li>
+            {% endfor -%}
+          {% endif %}
+      </ul>
+      {% endblock mainmenu -%}
         <header><h1 class="review">Лучшие рестораны Батуми</h1>
-        <img src="/static/images/index_main.jpg" width='1250px'>
+        <img src="/static/images/index_main.jpg" class="review">
         <main>
             <table class="review">
               <tr>
