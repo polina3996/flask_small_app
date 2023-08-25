@@ -1,6 +1,17 @@
-{% extends 'index.html' %}
-
-{% block content %}
-{{ super() }}
-<p>Страница не найдена, вернуться на <a href="{{url_for('index')}}">главную</a> страницу
-    {% endblock %}
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}"/>
+        <title>Страница не найдена</title>
+        <meta name='Страница не найдена' content='обработка ошибки'>
+    </head>
+    <body>
+        <header>
+            <h1 class="login">Страница не найдена</h1>
+        <main>
+            <p>Страница не найдена, вернуться на <a href="{{url_for('index')}}">главную</a> страницу
+        </main>
+        <footer>
+            <p class="footer">Автор: Полина Кириченко</p>
+        </footer>
+     </body>
+</html>
