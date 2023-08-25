@@ -5,6 +5,13 @@
         <meta name='Mangal' content='обзор ресторана'>
     </head>
     <body>
+     {%- block mainmenu -%}
+      <ul>
+        {% for m in menu -%}
+        <li><a href="{{m.url}}">{{m.name}}</a></li>
+        {% endfor -%}
+      </ul>
+      {% endblock mainmenu -%}
         <header><h1 class="restaurant">Tangerine Mangal</h1>
         <main>
           <table>
