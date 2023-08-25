@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}"/>
+        <title>Изменить отзыв</title>
+        <meta name='Изменить отзыв' content='редактирование отзыва пользователя'>
+    </head>
+    <body>
+    {%- block mainmenu -%}
+      <ul>
+          {% for m in AUmenu -%}
+            <li><a href="{{m.url}}">{{m.name}}</a></li>
+          {% endfor -%}
+      </ul>
+      {% endblock mainmenu -%}
+        <header><h1 class="login">Изменить отзыв "{{ feedback['title] }}"</h1>
+        <main>
+            {% for cat, msg in get_flashed_messages(True) %}
+                <div class="flash {{cat}}">{{msg}}</div>
+            {% endfor %}
+
+              <form action="{{url_for('update_feedback')}}" method="post" class="form-contact">
+                <p><label>Заголовок отзыва: </label> <input type="text" name="name" value="{{ request.form['title'] or feedback['title'] }}" required />
+                <p><label>Текст отзыва: </label>
+                <p><textarea name="post" rows=7 cols=40>{{ request.form['body'] or post['body'] }}</textarea>
+                <p><input type="submit" value="Сохранить" />
+                 </form>
+            <hr>
+                <form action="{{ url_for('delete', id=feedback['id']) }}" method="post">
+                <input class="danger" type="submit" value="Удалить отзыв" onclick="return confirm('Вы уверены?');">
+              </form>
+            {% endblock %}
+        </main>
+        <footer>
+            <hr>
+            <p class="footer">Автор: Полина Кириченко</p>
+        </footer>
+     </body>
+</html>
+

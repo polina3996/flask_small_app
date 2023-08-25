@@ -51,9 +51,13 @@ h1.login {
     font-size:50px;
     }
 
-div.but div {
-    width:90px;
+div.feed div {
     display:inline-block;
+    background-color:RosyBrown;
+    border-style:outset;
+    border-color:brown;
+    border-radius:10px;
+    }
  }
 
 div.content {
@@ -98,7 +102,12 @@ hr {
     width:300px;
      }
 
-
+button {
+    background-color:RosyBrown;
+    border-style:outset;
+    border-color:brown;
+    border-radius:10px;
+    }
 
 table.review {
     width:100%;
@@ -288,21 +297,19 @@ h2 {
     }
 
 
-button {
-    background-color:RosyBrown;
-    border-style:outset;
-    border-color:brown;
-    border-radius:10px;
-    }
 
+
+a {
+    target:blank;
+    }
 
 p.contacts {
     color:Brown;
     font-size:20px;
     }
 
-a {
-    target:blank;
+p a {
+    color:chocolate;
     }
 
 p.footer {
