@@ -51,6 +51,11 @@ h1.login {
     font-size:50px;
     }
 
+div.but div {
+    width:90px;
+    display:inline-block;
+ }
+
 div.content {
 	margin: 10px;
 }
