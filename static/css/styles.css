@@ -34,6 +34,191 @@ td.review {
     align:center;
       }
 
+td.kitchen {
+    color:DarkGoldenrod;
+    font-size:18px;
+    text-align:left;
+      }
+
+td.location {
+    color:DarkGoldenrod;
+    font-size:18px;
+    text-align:center;
+      }
+
+td.hours {
+    color:DarkGoldenrod;
+    font-size:18px;
+    text-align:right;
+      }
+
+td.g1 {
+    rowspan:2;
+    align:top;
+    width:40%;
+    }
+
+td.a1 {
+    rowspan:2;
+    valign:top;
+    height:100%
+    width:40%;
+    }
+
+td.h1 {
+    valign:top;
+    height:100%;
+    width:33%;
+    }
+
+td.m1 {
+    valign:top;
+    height:100%;
+    width:25%;
+    }
+
+td.t1 {
+    rowspan:2;
+    valign:top;
+    align:center;
+    height:100%
+    width:25%;
+    }
+
+td.g2 {
+    valign:bottom;
+    }
+
+td.a2 {
+    rowspan:2;
+    valign:top;
+    align:center;
+    height:100%
+    width:30%;
+    }
+
+td.h2 {
+    valign:top;
+    align:center;
+    height:100%;
+    width:33%;
+    }
+
+td.m2 {
+    valign:top;
+    align:center;
+    height:100%;
+    width:25%;
+    }
+td.t2 {
+    align:left;
+    valign:bottom;
+    width:35%;
+    }
+td.g3 {
+    valign:top;
+    width:20%;
+    }
+td.a3 {
+    align:center;
+    valign:bottom;
+    width:15%;
+    }
+
+td.h3 {
+    valign:top;
+    align:center;
+    width:33%;
+    }
+
+td.m3 {
+    align:center;
+    valign:top;
+    width:50%;
+    }
+td.t3 {
+    align:left;
+    valign:top;
+    width:35%;
+    }
+td.a4 {
+    align:center;
+    valign:top;
+    width:15%;
+    }
+
+
+img.g1 {
+    width:100%;
+    height:180%;
+    }
+img.a1 {
+    width:400%;
+    height:515%;
+    }
+img.m1 {
+    width:300%;
+    height:400%;
+    }
+img.t1 {
+    width:100%;
+    height:200%;
+    }
+img.g2 {
+    width:296%;
+    height:76%;
+    }
+img.a2 {
+    width:300%;
+    height:250%;
+    }
+img.m2 {
+    width:600%;
+    height:400%;
+    }
+img.t2 {
+    width:92%;
+    height:50%;
+    }
+img.g3 {
+    width:100%;
+    height:100%;
+    }
+img.t3 {
+    width:280%;
+    height:185%;
+    }
+img.g4 {
+    width:220%;
+    height:240%;
+    }
+
+
+
+h2 {
+    color:Peru;
+    font-size:30px;
+    }
+
+
+button {
+    background-color:RosyBrown;
+    border-style:outset;
+    border-color:brown;
+    border-radius:10px;
+    }
+
+
+p.contacts {
+    color:Brown;
+    font-size:20px;
+    }
+
+a {
+    target:blank;
+    }
+
 p.footer {
     color:maroon;
+    font-size:20px;
     }
