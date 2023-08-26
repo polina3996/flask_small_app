@@ -24,7 +24,7 @@ def create_db():
     """Creating a database"""
     db = get_db()
     with current_app.open_resource('schema.sql', mode='r') as f:
-        db.executescript(f.read().decode('utf8'))
+        db.executescript(f.read())
 
 
 def close_db(error=None):
@@ -44,6 +44,8 @@ def init_db_command():
 
 
 def init_app(app):
-    """Takes in the app and registrates it"""
+    """Register database functions with the Flask app. This is called by
+       the application factory.
+       """
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)

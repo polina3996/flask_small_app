@@ -27,4 +27,7 @@ def create_app(test_config=None):
     def index():
         return render_template('index.html')
 
+    import db
+    db.init_app(app)
+
     return app
