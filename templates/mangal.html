@@ -7,12 +7,12 @@
     <body>
      {%- block mainmenu -%}
       <ul>
-          {% if g.user % }
-            {% for m in NAUmenu -%}
-                <li><a href="{{m.url}}">{{m.name}}</a></li>
-            {% endfor -%}
+          {% if g.user %}
+            <li><span>{{ g.user['username'] }}</span>
+            <li><a href="{{ url_for('blueprint_auth.logout') }}">Выйти</a>
+            <li><a href="{{ url_for('index') }}">Главная</a>
           {% else %}
-            {% for m in AUmenu -%}
+            {% for m in NAUmenu -%}
                 <li><a href="{{m.url}}">{{m.name}}</a></li>
             {% endfor -%}
           {% endif %}
@@ -39,11 +39,11 @@
 <br><br>В "Мангале" вы можете попробовать настоящий домашний оджахури. <br><br>Времяпровождение также украсит приятная атмосфера и в дополнение к ней приятная музыка и наличие бесплатного Wi-fi. Размеры порций удовлетворят как "обжор", так и простых любителей вкусно поесть. Особенно посетители рекомендуют пахлаву.
 А при входе будет стоять красиво расписанный пианино.
           </h2>
-            <div class="but">
-                <div><button>Оставить отзыв</button></div>
-                <div><button>Список отзывов о ресторане</button></div>
-            </div>
 
+            <div class="feed">
+                <div><a href="">Оставить отзыв</a></div>
+                <div><a href="">Список отзывов о ресторане</a></div>
+            </div>
 
             <p class="contacts"><u>Контакты:</u>
           <p class="contacts">  +995 555 00 02 85</p>

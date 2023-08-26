@@ -7,12 +7,12 @@
     <body>
      {%- block mainmenu -%}
      <ul>
-          {% if g.user % }
-            {% for m in NAUmenu -%}
-                <li><a href="{{m.url}}">{{m.name}}</a></li>
-            {% endfor -%}
+          {% if g.user %}
+            <li><span>{{ g.user['username'] }}</span>
+            <li><a href="{{ url_for('blueprint_auth.logout') }}">Выйти</a>
+            <li><a href="{{ url_for('index') }}">Главная</a>
           {% else %}
-            {% for m in AUmenu -%}
+            {% for m in NAUmenu -%}
                 <li><a href="{{m.url}}">{{m.name}}</a></li>
             {% endfor -%}
           {% endif %}
@@ -49,9 +49,9 @@
 <br><br>
 В ресторане “Gourmand” можно заказать еду на вынос и доставку в отель.</h2>
 
-            <div class="but">
-                <div><button>Оставить отзыв</button></div>
-                <div><button>Список отзывов о ресторане</button></div>
+            <div class="feed">
+                <div><a href="{{ url_for('blueprint_prof_feed.leave_feedback_g')}}">Оставить отзыв</a></div>
+                <div><a href="{{ url_for('blueprint_prof_feed.all_feedbacks_g')}}">Список отзывов о ресторане</a></div>
             </div>
 
             <p class="contacts"><u>Контакты:</u>

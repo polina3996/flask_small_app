@@ -7,12 +7,12 @@
     <body>
      {%- block mainmenu -%}
       <ul>
-          {% if g.user % }
-            {% for m in NAUmenu -%}
-                <li><a href="{{m.url}}">{{m.name}}</a></li>
-            {% endfor -%}
+          {% if g.user %}
+            <li><span>{{ g.user['username'] }}</span>
+            <li><a href="{{ url_for('blueprint_auth.logout') }}">Выйти</a>
+            <li><a href="{{ url_for('index') }}">Главная</a>
           {% else %}
-            {% for m in AUmenu -%}
+            {% for m in NAUmenu -%}
                 <li><a href="{{m.url}}">{{m.name}}</a></li>
             {% endfor -%}
           {% endif %}
@@ -40,11 +40,11 @@
 <br><br>Среди фаворитов - хинкали и хачапури, они здесь получаются особенными за счет соблюдения рецептуры и добавления специй.
 <br><br>Цены на всё меню демократичные, многие отмечают большие размеры порций и низкую стоимость. Этот факт является главным преимуществом ресторана среди конкурентов.
           </h2>
-           <div class="but">
-            <div><button>Оставить отзыв</button></div>
-            <div><button>Список отзывов о ресторане</button></div>
-          </div>
 
+            <div class="feed">
+                <div><a href="{{ url_for('leave_feedback')}}">Оставить отзыв</a></div>
+                <div><a href="{{ url_for('all_feedbacks')}}">Список отзывов о ресторане</a></div>
+            </div>
 
             <p class="contacts"><u>Контакты:</u>
           <p class="contacts"> +995 568 94 05 15</p>
