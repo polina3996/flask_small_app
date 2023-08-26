@@ -8,11 +8,11 @@
     {%- block mainmenu -%}
       <ul>
           {% if g.user %}
-            {% for m in NAUmenu -%}
-                <li><a href="{{m.url}}">{{m.name}}</a></li>
-            {% endfor -%}
+            <li><span>{{ g.user['username'] }}</span>
+            <li><a href="{{ url_for('blueprint_auth.logout') }}">Выйти</a>
+            <li><a href="{{ url_for('index') }}">Главная</a>
           {% else %}
-            {% for m in AUmenu -%}
+            {% for m in NAUmenu -%}
                 <li><a href="{{m.url}}">{{m.name}}</a></li>
             {% endfor -%}
           {% endif %}

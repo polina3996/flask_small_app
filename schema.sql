@@ -5,12 +5,6 @@ url text NOT NULL
 );
 
 
-CREATE TABLE IF NOT EXISTS AUmenu(
-id integer PRIMARY KEY AUTOINCREMENT,
-name text NOT NULL,
-url text NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS NAUmenu(
 id integer PRIMARY KEY AUTOINCREMENT,
 name text NOT NULL,

@@ -7,9 +7,9 @@
     <body>
     {%- block mainmenu -%}
       <ul>
-          {% for m in AUmenu -%}
-            <li><a href="{{m.url}}">{{m.name}}</a></li>
-          {% endfor -%}
+          <li><span>{{ g.user['username'] }}</span>
+          <li><a href="{{ url_for('blueprint_auth.logout') }}">Выйти</a>
+          <li><a href="{{ url_for('index') }}">Главная</a>
       </ul>
       {% endblock mainmenu -%}
         <header><h1 class="login">Новый отзыв на ресторан  <a href="{{ url_for('!!!')}}">!!!!</a></h1>
