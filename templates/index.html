@@ -7,7 +7,7 @@
     <body>
     {%- block mainmenu -%}
       <ul>
-          {% if g.user % }
+          {% if g.user %}
             {% for m in NAUmenu -%}
                 <li><a href="{{m.url}}">{{m.name}}</a></li>
             {% endfor -%}
@@ -28,9 +28,9 @@
                 <th><u>Сердце Батуми</u></th>
               </tr>
               <tr>
-                <td class="review"><img src="/static/images/index_gourmand.jpg"></td>
-                <td class="review"><img src="/static/images/index_alaverdi.jpg"></td>
-                <td class="review"><img src="/static/images/index_heart_of_batumi.jpg"></td>
+                <td class="review"><img src="/static/images/index_gourmand.jpg" class="review2"></td>
+                <td class="review"><img src="/static/images/index_alaverdi.jpg" class="review1"></td>
+                <td class="review"><img src="/static/images/index_heart_of_batumi.jpg" class="review1"></td>
               </tr>
               <tr>
                 <th><u>Panorama</u></th>
@@ -38,9 +38,9 @@
                 <th><u>Мангал</u></th>
               </tr>
               <tr>
-                <td class="review"><img src="/static/images/index_panorama.jpg"></td>
-                <td class="review"><img src="/static/images/index_tavaduri.jpg"></td>
-                <td class="review"><img src="/static/images/index_mangal.jpg"></td>
+                <td class="review"><img src="/static/images/index_panorama.jpg" class="review2"></td>
+                <td class="review"><img src="/static/images/index_tavaduri.jpg" class="review1"></td>
+                <td class="review"><img src="/static/images/index_mangal.jpg" class="review1"></td>
               </tr>
           </table>
         </main>

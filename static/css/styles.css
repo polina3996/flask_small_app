@@ -244,6 +244,16 @@ td.a4 {
 img.review {
     width:1250px;
     }
+img.review1 {
+    width:400px;
+    height:250px;
+    align:center;
+      }
+img.review2 {
+    width:450px;
+    height:250px;
+    align:center;
+      }
 img.g1 {
     width:100%;
     height:180%;
