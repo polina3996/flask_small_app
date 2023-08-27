@@ -15,7 +15,7 @@ def get_db():
        is unique for each request and will be reused if this is called
        again.
        """
-    if not hasattr(g, 'db'):
+    if 'db' not in g:
         g.db = connect_db()
     return g.db
 
@@ -23,11 +23,11 @@ def get_db():
 def create_db():
     """Creating a database"""
     db = get_db()
-    with current_app.open_resource('schema.sql', mode='r') as f:
-        db.executescript(f.read())
+    with current_app.open_resource('schema.sql') as f:
+        db.executescript(f.read().decode('utf8'))
 
 
-def close_db(error=None):
+def close_db(e=None):
     """If this request connected to the database, close the
             connection.
             """
