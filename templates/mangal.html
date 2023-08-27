@@ -6,15 +6,15 @@
     </head>
     <body>
      {%- block mainmenu -%}
-      <ul>
+      <ul class="mainmenu">
           {% if g.user %}
             <li><span>{{ g.user['username'] }}</span>
             <li><a href="{{ url_for('blueprint_auth.logout') }}">Выйти</a>
             <li><a href="{{ url_for('index') }}">Главная</a>
           {% else %}
-            {% for m in NAUmenu -%}
-                <li><a href="{{m.url}}">{{m.name}}</a></li>
-            {% endfor -%}
+             <li><a href="{{ url_for('blueprint_auth.login') }}">Авторизация</a>
+             <li><a href="{{ url_for('blueprint_auth.register') }}">Регистрация</a>
+             <li><a href="{{ url_for('index') }}">Главная</a>
           {% endif %}
       </ul>
       {% endblock mainmenu -%}
@@ -41,8 +41,8 @@
           </h2>
 
             <div class="feed">
-                <div><a href="">Оставить отзыв</a></div>
-                <div><a href="">Список отзывов о ресторане</a></div>
+                <div><a href="{{ url_for('blueprint_prof_feed.leave_feedback')}}">Оставить отзыв</a></div>
+                <div><a href="{{ url_for('blueprint_prof_feed.all_feedbacks')}}">Список отзывов о ресторане</a></div>
             </div>
 
             <p class="contacts"><u>Контакты:</u>

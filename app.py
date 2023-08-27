@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, abort
 import os
 from FDataBase import FDataBase
 from db import get_db
@@ -21,15 +21,29 @@ def create_app(test_config=None):
 
     @app.before_request
     def before_request():
-        """Catches the request and do the connection to database every time before each request"""
+        """Catches the request and does the connection to database every time before each request"""
         global dbase
         db_con = get_db()
         dbase = FDataBase(db_con)
 
     @app.route('/')
+    @app.route('/index')
     def index():
         """Main page handler"""
         return render_template('index.html')
+
+    @app.route('/gourmand')
+    def gourmand():
+        """Restaurant 'Gourmand' page handler"""
+        return render_template('gourmand.html')
+
+    # @app.route('/restaurant/<alias>')
+    # def restaurant(alias):
+    #     """Restaurant page handler"""
+    #     title, url = dbase.get_restaurant(alias)
+    #     if not title:
+    #         abort(404)
+    #     return render_template('restaurant.html', menu=dbase.get_menu(), title=title, post=post)
 
     import db
     db.init_app(app)

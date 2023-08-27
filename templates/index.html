@@ -5,6 +5,7 @@
         <meta name='Рестораны Батуми' content='обзор ресторанов'>
     </head>
     <body>
+    {%- block mainmenu -%}
         <ul class="mainmenu">
           {% if g.user %}
             <li><span>{{ g.user['username'] }}</span>
@@ -16,6 +17,7 @@
             <li><a href="{{ url_for('index') }}">Главная</a>
           {% endif %}
       </ul>
+    {% endblock mainmenu -%}
     {% block title -%}
         <header><h1 class="review">Лучшие рестораны Батуми</h1>
             <img src="/static/images/index_main.jpg" class="review">
