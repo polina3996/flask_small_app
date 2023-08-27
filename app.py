@@ -1,15 +1,11 @@
 from flask import Flask, render_template
 import os
+from FDataBase import FDataBase
+from db import get_db
 from instance.config import SECRET_KEY
 
+dbase = None
 
-# вручную внести меню в БД или просписать в скл файле
-# NAUmenu = ['Авторизация' blueprint_auth/login
-#            'Регистрация' blueprint_auth/register
-#            'Главная' /]
-# AUmenu = [Имя blueprint_prof_feed/profile
-#           Выйти blueprint_auth/logout
-#           Главная /]
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -23,8 +19,16 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    @app.before_request
+    def before_request():
+        """Catches the request and do the connection to database every time before each request"""
+        global dbase
+        db_con = get_db()
+        dbase = FDataBase(db_con)
+
     @app.route('/')
     def index():
+        """Main page handler"""
         return render_template('index.html')
 
     import db

@@ -5,12 +5,6 @@ url text NOT NULL
 );
 
 
-CREATE TABLE IF NOT EXISTS NAUmenu(
-id integer PRIMARY KEY AUTOINCREMENT,
-name text NOT NULL,
-url text NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS feedbacks(
 id integer PRIMARY KEY AUTOINCREMENT,
 author_id integer NOT NULL,

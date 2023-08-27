@@ -5,27 +5,28 @@
         <meta name='Рестораны Батуми' content='обзор ресторанов'>
     </head>
     <body>
-    {%- block mainmenu -%}
-      <ul>
+        <ul class="mainmenu">
           {% if g.user %}
             <li><span>{{ g.user['username'] }}</span>
             <li><a href="{{ url_for('blueprint_auth.logout') }}">Выйти</a>
             <li><a href="{{ url_for('index') }}">Главная</a>
           {% else %}
-            {% for m in NAUmenu -%}
-                <li><a href="{{m.url}}">{{m.name}}</a></li>
-            {% endfor -%}
+            <li><a href="{{ url_for('blueprint_auth.login') }}">Авторизация</a>
+            <li><a href="{{ url_for('blueprint_auth.register') }}">Регистрация</a>
+            <li><a href="{{ url_for('index') }}">Главная</a>
           {% endif %}
       </ul>
-      {% endblock mainmenu -%}
+    {% block title -%}
         <header><h1 class="review">Лучшие рестораны Батуми</h1>
-        <img src="/static/images/index_main.jpg" class="review">
+            <img src="/static/images/index_main.jpg" class="review">
+            {% endblock %}
+
         <main>
             <table class="review">
               <tr>
-                <th><u>Гурман</u></th>
-                <th><u>Алаверди</u></th>
-                <th><u>Сердце Батуми</u></th>
+                  <th><a href="{{ url_for('gourmand') }}"></a><u>Гурман</u></th>
+                  <th><a href="{{ url_for('alaverdi') }}"></a><u>Алаверди</u></th>
+                  <th><a href="{{ url_for('heart_of_batumi') }}"></a><u>Сердце Батуми</u></th>
               </tr>
               <tr>
                 <td class="review"><img src="/static/images/index_gourmand.jpg" class="review2"></td>
@@ -33,9 +34,9 @@
                 <td class="review"><img src="/static/images/index_heart_of_batumi.jpg" class="review1"></td>
               </tr>
               <tr>
-                <th><u>Panorama</u></th>
-                <th><u>Тавадури</u></th>
-                <th><u>Мангал</u></th>
+                  <th><a href="{{ url_for('panorama') }}"></a><u>Panorama</u></th>
+                  <th><a href="{{ url_for('tavaduri') }}"></a><u>Тавадури</u></th>
+                  <th><a href="{{ url_for('mangal') }}"></a><u>Мангал</u></th>
               </tr>
               <tr>
                 <td class="review"><img src="/static/images/index_panorama.jpg" class="review2"></td>
