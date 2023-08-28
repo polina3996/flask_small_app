@@ -6,10 +6,10 @@
     </head>
     <body>
     {%- block mainmenu -%}
-      <ul>
-        {% for m in NAUmenu -%}
-        <li><a href="{{m.url}}">{{m.name}}</a></li>
-        {% endfor -%}
+      <ul class="mainmenu">
+          <li><a href="{{ url_for('auth.login') }}">Авторизация</a>
+          <li><a href="{{ url_for('auth.register') }}">Регистрация</a>
+          <li><a href="{{ url_for('index') }}">Главная</a>
       </ul>
       {% endblock mainmenu -%}
         <header><h1 class="login">Регистрация</h1>

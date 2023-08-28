@@ -4,7 +4,7 @@ from FDataBase import FDataBase
 from db import get_db
 from instance.config import SECRET_KEY
 
-dbase = None
+#dbase = None
 
 
 def create_app(test_config=None):
@@ -19,12 +19,12 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    @app.before_request
-    def before_request():
-        """Catches the request and does the connection to database every time before each request"""
-        global dbase
-        db_con = get_db()
-        dbase = FDataBase(db_con)
+    # @app.before_request
+    # def before_request():
+    #     """Catches the request and does the connection to database every time before each request"""
+    #     global dbase
+    #     db_con = get_db()
+    #     dbase = FDataBase(db_con)
 
     @app.route('/')
     @app.route('/index')
