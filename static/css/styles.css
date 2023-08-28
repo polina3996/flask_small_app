@@ -4,18 +4,20 @@ body {
 
 ul.mainmenu {
 	list-style: none;
-	background: #3F4137;
+	background: SandyBrown;
 	height: 60px;
 	margin: 0;
 	padding: 0;
 	color: #fdc073;
-	font-size: 20px;
+	font-size: 25px;
+	font-family: "Courier New", Times, serif;
+	font-weight: bold;
 	overflow: hidden;
 }
 
 ul.mainmenu li {
 	float: left;
-	margin: 18px 40px 0 50px;
+	margin: 18px 130px 0px 130px;
 }
 
 ul.mainmenu li.last {
@@ -23,12 +25,12 @@ ul.mainmenu li.last {
     }
 
 ul.mainmenu li a {
-	color: #fdc073;
+	color: Sienna;
 	text-decoration: none;
 }
 
 ul.mainmenu li a:hover {
-	color: #FDA83D;
+	color: Sienna;
 }
 
 h1.review {

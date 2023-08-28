@@ -9,7 +9,7 @@ auth = Blueprint('auth', __name__)  # url_prefix='/auth'
 @auth.before_app_request
 def load_logged_in_user():
     """Checking if there is a user in a session. If it is, user's data are collected from database and stored in a
-    session """
+    session (before each request!) """
     if session.get('user_id') is None:
         g.user = None
     else:
@@ -53,6 +53,7 @@ def login():
             session['user_id'] = user['id']
             return redirect(request.args.get('next') or url_for('index'))
         flash('Неверная пара логин/пароль', category='error')
+    # if request.method is GET or if there occurred some errors
     return render_template('auth/login.html', form=form)
 
 
