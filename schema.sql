@@ -1,8 +1,4 @@
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS feedbacks;
-
-
-CREATE TABLE users
+CREATE TABLE IF NOT EXISTS users
 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username text UNIQUE NOT NULL,
@@ -11,7 +7,7 @@ CREATE TABLE users
     avatar BLOB DEFAULT NULL
 );
 
-CREATE TABLE feedbacks
+CREATE TABLE IF NOT EXISTS feedbacks
 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     author_id INTEGER NOT NULL,
@@ -22,6 +18,12 @@ CREATE TABLE feedbacks
     FOREIGN KEY (author_id) REFERENCES users (id)
 );
 
+CREATE TABLE IF NOT EXISTS restaurants
+(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title text UNIQUE NOT NULL,
+    picture BLOB DEFAULT NULL
+)
 
 
 

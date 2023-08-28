@@ -37,6 +37,31 @@ def create_app(test_config=None):
         """Restaurant 'Gourmand' page handler"""
         return render_template('gourmand.html')
 
+    @app.route('/alaverdi')
+    def alaverdi():
+        """Restaurant 'Alaverdi' page handler"""
+        return render_template('alaverdi.html')
+
+    @app.route('/heart_of_batumi')
+    def heart_of_batumi():
+        """Restaurant 'Heart of Batumi' page handler"""
+        return render_template('heart_of_batumi.html')
+
+    @app.route('/panorama')
+    def panorama():
+        """Restaurant 'Panorama' page handler"""
+        return render_template('panorama.html')
+
+    @app.route('/tavaduri')
+    def tavaduri():
+        """Restaurant 'Tavaduri' page handler"""
+        return render_template('tavaduri.html')
+
+    @app.route('/mangal')
+    def mangal():
+        """Restaurant 'Mangal' page handler"""
+        return render_template('mangal.html')
+
     # @app.route('/restaurant/<alias>')
     # def restaurant(alias):
     #     """Restaurant page handler"""
