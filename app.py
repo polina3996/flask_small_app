@@ -17,6 +17,11 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    @app.errorhandler(404)
+    def page_not_found(error):
+        """Page not found handler"""
+        return render_template('page404.html')
+
     @app.route('/')
     @app.route('/index')
     def index():
