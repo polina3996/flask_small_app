@@ -1,10 +1,8 @@
-from flask import Flask, render_template, abort
 import os
-from FDataBase import FDataBase
-from db import get_db
-from instance.config import SECRET_KEY
 
-#dbase = None
+from flask import Flask, render_template
+
+from instance.config import SECRET_KEY
 
 
 def create_app(test_config=None):
@@ -18,13 +16,6 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
-
-    # @app.before_request
-    # def before_request():
-    #     """Catches the request and does the connection to database every time before each request"""
-    #     global dbase
-    #     db_con = get_db()
-    #     dbase = FDataBase(db_con)
 
     @app.route('/')
     @app.route('/index')
@@ -70,7 +61,10 @@ def create_app(test_config=None):
     #         abort(404)
     #     return render_template('restaurant.html', menu=dbase.get_menu(), title=title, post=post)
 
-    import db
+    import db, auth
+
     db.init_app(app)
+
+    app.register_blueprint(auth.auth)
 
     return app

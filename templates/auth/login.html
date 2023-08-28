@@ -6,10 +6,10 @@
     </head>
     <body>
     {%- block mainmenu -%}
-      <ul>
-        {% for m in NAUmenu -%}
-        <li><a href="{{m.url}}">{{m.name}}</a></li>
-        {% endfor -%}
+      <ul class="mainmenu">
+          <li><a href="{{ url_for('auth.login') }}">Авторизация</a>
+          <li><a href="{{ url_for('auth.register') }}">Регистрация</a>
+          <li><a href="{{ url_for('index') }}">Главная</a>
       </ul>
       {% endblock mainmenu -%}
         <header><h1 class="login">Авторизация</h1>
@@ -38,9 +38,8 @@
                 <p> {{ form.remember.label() }} {{ form.remember()  }}
                 <p> {{ form.submit() }}
                 <hr>
-                <p>Ещё не <a href="{{url_for('blueprint_auth.register')}}">зарегистрированы?</a>
+                <p>Ещё не <a href="{{url_for('auth.register')}}">зарегистрированы?</a>
             </form>
-            {% endblock %}
         </main>
         <footer>
             <hr>
