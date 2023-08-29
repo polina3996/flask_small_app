@@ -364,6 +364,9 @@ a {
     target:blank;
     }
 
+span.username {
+    color: Sienna
+}
 p.contacts {
     color:Brown;
     font-size:20px;

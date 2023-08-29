@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}"/>
+        <title>Профиль пользователя</title>
+        <meta name='Профиль' content='профиль'>
+    </head>
+    <body>
+    {%- block mainmenu -%}
+        <ul class="mainmenu">
+            <li><span class="username"><a href="{{ url_for('profile') }}">{{ g.user['username'] }}</a></span>
+            <li><a href="{{ url_for('auth.logout') }}">Выйти</a>
+            <li><a href="{{ url_for('index') }}">Главная</a>
+      </ul>
+    {% endblock mainmenu -%}
+
+    {% for cat, msg in get_flashed_messages(True) %}
+    <div class="flash {{cat}}">{{msg}}</div>
+    {% endfor %}
+
+    <table border="0" class="profile-table">
+        <tr>
+            <td valign="top">
+                <div class="profile-ava"><img src="{{ url_for('userava') }}"></div>
+                <div class="profile-load">
+                    <form action="{{url_for('upload')}}" method="POST" enctype="multipart/form-data">
+                    <p><input type="file" name="file"></p>
+                    <p><input type="submit" value="Загрузить"></p>
+                    </form>
+                </div>
+            </td>
+            <td valign="top" class="profile-panel">
+                <p><a href="{{url_for('auth.logout')}}">Выйти из профиля</a>
+                <ul class="profile-info">
+                <li>Имя: {{ g.user['username'] }}</li>
+                <li>Email: {{ g.user['email'] }}</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+    <footer>
+            <p class="footer">Автор: Полина Кириченко</p>
+        </footer>
+    </body>
+</html>
