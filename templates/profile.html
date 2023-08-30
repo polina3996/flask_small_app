@@ -35,21 +35,17 @@
                 <ul class="profile-info">
                 <li>Имя: {{ g.user.username }}</li>
                 <li>Email: {{ g.user.email }}</li>
+                {% if current_user.last_seen %}
+                <li>Заходил(-а) в {{ current_user.last_seen.strftime('%H:%M %d-%m-%Y') }} по Гринвичу</li>
+                {% endif %}
                 </ul>
             </td>
         </tr>
     </table>
-
     <h2>Мои отзывы</h2>
-    <ul class="list-posts">
-        {% for f in feedbacks %}
-        <li>
-            <p class="title"><a href="{{ url_for('show_feedback', alias=f.url)}}">{{f.title}}</a></p>
-            <p>От {{f.created}}</p>
-            <p class="annonce">{{ (f.body | striptags) [:50] }}</p>
-        </li>
-        {% endfor %}
-    </ul>
+    {% for f in feedbacks %}
+    {% include 'feedback/_feedback.html' %}
+    {% endfor %}
     <footer>
             <p class="footer">Автор: Полина Кириченко</p>
         </footer>

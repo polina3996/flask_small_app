@@ -1,17 +1,26 @@
-import functools
 import os
 import sqlite3
-from flask import Flask, render_template, session, url_for, request, flash, redirect, g, make_response
-from flask_login import login_required, current_user, LoginManager
+from datetime import datetime
 
+from flask import Flask, render_template, session, url_for, request, flash, redirect, g, make_response
+from flask_login import LoginManager
+import db
 from FDataBase import FDataBase
 from UserLogin import UserLogin
-from db import get_db
 from instance.config import SECRET_KEY
+from auth import auth as auth_bp
+from flask_login import current_user, login_required
+
+login_manager = LoginManager()
+# redirects to login page when trying to access must-be-authorized pages
+login_manager.login_view = 'auth.login'
+login_manager.login_message = 'Авторизуйтесь для доступа к закрытым страницам'
+login_manager.login_message_category = 'success'
 
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
+
     app.config.from_mapping(SECRET_KEY=SECRET_KEY, DATABASE=os.path.join(app.instance_path, 'flask_small_app.sqlite'))
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True)
@@ -21,6 +30,26 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+
+    # initializing of database
+    db.init_app(app)
+
+    login_manager.init_app(app)
+
+    # registration of a blueprint 'auth.py'
+    app.register_blueprint(auth_bp)
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        """Runs a database query that will put the target user in the database session"""
+        return UserLogin().fromDB(user_id, FDataBase(db.get_db()))  # int(user_id)??
+
+    @app.before_request
+    def before_request():
+        """Sets the time a user was last seen in an application"""
+        if current_user.is_authenticated:
+            current_user.last_seen = datetime.utcnow()
+            db.get_db().commit()
 
     @app.errorhandler(404)
     def page_not_found(error):
@@ -32,7 +61,6 @@ def create_app(test_config=None):
     def index():
         """Main page handler"""
         return render_template('index.html')
-
     @app.route('/gourmand')
     def gourmand():
         """Restaurant 'Gourmand' page handler"""
@@ -63,30 +91,14 @@ def create_app(test_config=None):
         """Restaurant 'Mangal' page handler"""
         return render_template('mangal.html')
 
-    # @app.route('/restaurant/<alias>')
-    # def restaurant(alias):
-    #     """Restaurant page handler"""
-    #     title, url = dbase.get_restaurant(alias)
-    #     if not title:
-    #         abort(404)
-    #     return render_template('restaurant.html', menu=dbase.get_menu(), title=title, post=post)
-
-    login_manager = LoginManager(app)
-    login_manager.login_view = 'auth.login'  # при посещении закрытой страницы(только для авторизованных) будет открываться страница с авторизацией
-    login_manager.login_message = 'Авторизуйтесь для доступа к закрытым страницам'  # задаем новое мгновенное сообщение
-    login_manager.login_message_category = 'success'
-
-    # id передается в запросе к серверу(в конкр сессии)
-    @login_manager.user_loader  # вызывается после before_query(где устанавливается связь с БД)
-    def load_user(user_id):  # +
-        return UserLogin().fromDB(user_id,
-                                  dbase)  # загружаем информ о юзере из БД и создаем ЭК -> понятно, какой пользователь сейчас авторизован
-
-    @app.route('/profile')
-    # @login_required
-    def profile():
+    @app.route('/profile/<username>')
+    @login_required
+    def profile(username):
         """Opens a profile page only for authorized users"""
-        return render_template('profile.html')
+        #user = FDataBase(db.get_db()).get_user_by_name(username)
+        #name, email = FDataBase(db.get_db()).get_user_by_name(username)
+        #title, body, url, created = FDataBase(db.get_db()).get_feedbacks_of_a_user(current_user.get_id())
+        return render_template('profile.html') # feedbacks=feedbacks)
 
     def verify_ext(filename):
         """Verifies the extension of the file is 'png'"""
@@ -96,11 +108,11 @@ def create_app(test_config=None):
         return False
 
     @app.route('/userava')
-    # @login_required
+    @login_required
     def userava():
         """Returns an image in PNG-format"""
-        db = get_db()
-        user = db.execute('''SELECT * FROM users WHERE id = ?''', (session.get('user_id'),)).fetchone()
+        dbase = get_db()
+        user = dbase.execute('''SELECT * FROM users WHERE id = ?''', (session.get('user_id'),)).fetchone()
         img = None
         if not user['avatar']:
             try:
@@ -118,18 +130,18 @@ def create_app(test_config=None):
         return resp
 
     @app.route('/upload', methods=['POST', 'GET'])
-    # @login_required
+    @login_required
     def upload():
         """Uploads an image into user's profile"""
-        db = get_db()
-        user = db.execute('''SELECT * FROM users WHERE id = ?''', (session.get('user_id'),)).fetchone()
+        dbase = get_db()
+        user = dbase.execute('''SELECT * FROM users WHERE id = ?''', (session.get('user_id'),)).fetchone()
         if request.method == 'POST':
             file = request.files['file']
             if file and verify_ext(file.filename):
                 try:
                     img = file.read()
-                    db.execute(f'UPDATE users SET avatar = ? WHERE id = ?', (sqlite3.Binary(img), user['id']))
-                    db.commit()
+                    dbase.execute(f'UPDATE users SET avatar = ? WHERE id = ?', (sqlite3.Binary(img), user['id']))
+                    dbase.commit()
                 except sqlite3.Error as e:
                     flash('Ошибка обновления аватара', 'error')
                 except FileNotFoundError as e:
@@ -138,13 +150,5 @@ def create_app(test_config=None):
                 flash('Ошибка обновления аватара', 'error')
         flash('Аватар обновлен', 'success')
         return redirect(url_for('profile'))
-
-    import db, auth
-
-    # initializing of database
-    db.init_app(app)
-
-    # registration of a blueprint 'auth.py'
-    app.register_blueprint(auth.auth)
 
     return app
