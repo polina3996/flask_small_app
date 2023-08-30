@@ -7,9 +7,10 @@
     <body>
     {%- block mainmenu -%}
       <ul class="mainmenu">
+          <li><a href="{{ url_for('index') }}">Главная</a>
           <li><a href="{{ url_for('auth.login') }}">Авторизация</a>
           <li><a href="{{ url_for('auth.register') }}">Регистрация</a>
-          <li><a href="{{ url_for('index') }}">Главная</a>
+
       </ul>
       {% endblock mainmenu -%}
         <header><h1 class="login">Авторизация</h1>

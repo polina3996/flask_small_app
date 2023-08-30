@@ -11,6 +11,10 @@ class UserLogin(UserMixin):
         self.__user = user
         return self
 
+    def get_id(self):
+        """a method that returns a unique identifier for the user as a string"""
+        return str(self.__user['id'])
+
     # def get_name(self):
     #     return self.__user['name'] if self.__user else 'Без имени'
 
@@ -52,6 +56,3 @@ class UserLogin(UserMixin):
     #"""a property that is False for regular users, and True for a special, anonymous user."""
     #     return False
 
-    # def get_id(self):
-    #"""a method that returns a unique identifier for the user as a string"""
-    #     return str(self.__user['id'])

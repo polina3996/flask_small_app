@@ -19,6 +19,7 @@ class FDataBase:
         except sqlite3.Error as e:
             print('Ошибка получения данных из БД' + str(e))
         return False
+
     # def get_menu(self):
     #     sql = '''SELECT * FROM mainmenu'''
     #     try:
@@ -39,16 +40,16 @@ class FDataBase:
     #             print('Статья с таким url уже существует')
     #             return False
 
-            # base = url_for('static', filename='images_html')
-            # text = re.sub(r"(?P<tag><img\s+[^>]*src=)(?P<quote>[\"'])(?P<url>.+?)(?P=quote)>", "\\g<tag>" + base + "/\\g<url>>", res['text']) #модифицируем путь к картинкам, чтобы добавился еще каталог и подкаталог к ссылке
+    # base = url_for('static', filename='images_html')
+    # text = re.sub(r"(?P<tag><img\s+[^>]*src=)(?P<quote>[\"'])(?P<url>.+?)(?P=quote)>", "\\g<tag>" + base + "/\\g<url>>", res['text']) #модифицируем путь к картинкам, чтобы добавился еще каталог и подкаталог к ссылке
 
-        #     tm = math.floor(time.time())
-        #     self.__cur.execute('''INSERT INTO posts VALUES(NULL, ?, ?, ?, ?)''', (title, text, url, tm))
-        #     self.__db.commit()
-        # except sqlite3.Error as e:
-        #     print('Ошибка добавления статьи в БД' + str(e))
-        #     return False
-        # return True
+    #     tm = math.floor(time.time())
+    #     self.__cur.execute('''INSERT INTO posts VALUES(NULL, ?, ?, ?, ?)''', (title, text, url, tm))
+    #     self.__db.commit()
+    # except sqlite3.Error as e:
+    #     print('Ошибка добавления статьи в БД' + str(e))
+    #     return False
+    # return True
 
     # def get_post(self, alias):
     #     try:
@@ -84,8 +85,6 @@ class FDataBase:
             print('Ошибка добавления пользователя в БД' + str(e))
             return False
         return True
-
-
 
     def get_user_by_name(self, name):
         try:
