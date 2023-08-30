@@ -7,7 +7,7 @@
     <body>
     {%- block mainmenu -%}
         <ul class="mainmenu">
-            <li><span class="username"><a href="{{ url_for('profile') }}">{{ g.user['username'] }}</a></span>
+            <li><span class="username"><a href="{{ url_for('profile') }}">{{ current_user.username }}</a></span>
             <li><a href="{{ url_for('auth.logout') }}">Выйти</a>
             <li><a href="{{ url_for('index') }}">Главная</a>
       </ul>
@@ -31,8 +31,8 @@
             <td valign="top" class="profile-panel">
                 <p><a href="{{url_for('auth.logout')}}">Выйти из профиля</a>
                 <ul class="profile-info">
-                <li>Имя: {{ g.user['username'] }}</li>
-                <li>Email: {{ g.user['email'] }}</li>
+                <li>Имя: {{ current_user.username }}</li>
+                <li>Email: {{ current_user.email }}</li>
                 </ul>
             </td>
         </tr>

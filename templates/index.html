@@ -7,15 +7,14 @@
     <body>
     {%- block mainmenu -%}
         <ul class="mainmenu">
-          {% if g.user %}
-            <li><span class="username"><a href="{{ url_for('profile') }}">{{ g.user['username'] }}</a></span>
-            <li><a href="{{ url_for('auth.logout') }}">Выйти</a>
-            <li><a href="{{ url_for('index') }}">Главная</a>
-          {% else %}
-            <li><a href="{{ url_for('auth.login') }}">Авторизация</a>
-            <li><a href="{{ url_for('auth.register') }}">Регистрация</a>
-            <li><a href="{{ url_for('index') }}">Главная</a>
-          {% endif %}
+          <li><a href="{{ url_for('index') }}">Главная</a>
+              {% if current_user.is_authenticated %}
+                <li><span class="username"><a href="{{ url_for('profile') }}">{{ current_user.username }}</a></span>
+                <li><a href="{{ url_for('auth.logout') }}">Выйти</a>
+              {% else %}
+                <li><a href="{{ url_for('auth.login') }}">Авторизация</a>
+                <li><a href="{{ url_for('auth.register') }}">Регистрация</a>
+              {% endif %}
       </ul>
     {% endblock mainmenu -%}
     {% block title -%}

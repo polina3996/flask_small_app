@@ -3,6 +3,10 @@ from wtforms import StringField, SubmitField, BooleanField, PasswordField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
 
 
+# a class of some kind to represent and validate our
+# client-side form data. For example, WTForms is a library that will
+# handle this for us, and we use a custom LoginForm to validate.
+
 class LoginForm(FlaskForm):
     username = StringField('Имя: ', validators=[Length(min=4, max=100,
                                                        message='Имя должно быть от 4 до 100 символов')])

@@ -36,8 +36,8 @@
                 {% endfor %}
 
                 <p> {{ form.remember.label() }} {{ form.remember()  }}
-                <p> {{ form.submit() }}
-                <p>Ещё не <a href="{{url_for('auth.register')}}">зарегистрированы?</a>
+                <p> {{ form.submit() }}</p>
+                <p>Ещё не <a href="{{url_for('auth.register')}}">зарегистрированы?</a></p>
             </form>
         </main>
         <footer>
