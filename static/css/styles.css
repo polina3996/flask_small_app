@@ -362,9 +362,10 @@ ul.profile-info li {margin-top: 10px;}
 
 a {
     target:blank;
+    color:Chocolate;
     }
 
-span.username {
+li.username {
     color: Sienna
 }
 p.contacts {

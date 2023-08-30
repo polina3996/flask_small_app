@@ -7,9 +7,11 @@
     <body>
     {%- block mainmenu -%}
         <ul class="mainmenu">
-            <li><span class="username"><a href="{{ url_for('profile') }}">{{ current_user.username }}</a></span>
-            <li><a href="{{ url_for('auth.logout') }}">Выйти</a>
-            <li><a href="{{ url_for('index') }}">Главная</a>
+            {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('index') }}">Главная</a>
+                <li class="username"><a href="{{ url_for('profile', username=g.user.username) }}">Профиль</a></li>
+                <li><a href="{{ url_for('auth.logout') }}">Выйти</a>
+            {% endif %}
       </ul>
     {% endblock mainmenu -%}
 
@@ -31,12 +33,23 @@
             <td valign="top" class="profile-panel">
                 <p><a href="{{url_for('auth.logout')}}">Выйти из профиля</a>
                 <ul class="profile-info">
-                <li>Имя: {{ current_user.username }}</li>
-                <li>Email: {{ current_user.email }}</li>
+                <li>Имя: {{ g.user.username }}</li>
+                <li>Email: {{ g.user.email }}</li>
                 </ul>
             </td>
         </tr>
     </table>
+
+    <h2>Мои отзывы</h2>
+    <ul class="list-posts">
+        {% for f in feedbacks %}
+        <li>
+            <p class="title"><a href="{{ url_for('show_feedback', alias=f.url)}}">{{f.title}}</a></p>
+            <p>От {{f.created}}</p>
+            <p class="annonce">{{ (f.body | striptags) [:50] }}</p>
+        </li>
+        {% endfor %}
+    </ul>
     <footer>
             <p class="footer">Автор: Полина Кириченко</p>
         </footer>

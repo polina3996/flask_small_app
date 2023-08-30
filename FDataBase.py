@@ -10,7 +10,7 @@ class FDataBase:
 
     def get_user(self, user_id):
         try:
-            self.__cur.execute(f'SELECT * FROM users WHERE id = {user_id} LIMIT 1')
+            self.__cur.execute(f'SELECT name FROM users WHERE id = {user_id} LIMIT 1')
             res = self.__cur.fetchone()
             if not res:
                 print('Пользователь не найден')
@@ -61,15 +61,26 @@ class FDataBase:
     #         print('Ошибка получения статьи из БД' + str(e))
     #     return (False, False)
 
-    # def get_posts_anonce(self):
-    #     try:
-    #         self.__cur.execute(f"SELECT id, title, text, url FROM posts ORDER BY timee DESC")
-    #         res = self.__cur.fetchall()
-    #         if res:
-    #             return res
-    #     except sqlite3.Error as e:
-    #         print('Ошибка получения статьи из БД' + str(e))
-    #     return []
+    def get_posts_anonce(self):
+        try:
+            self.__cur.execute(f"SELECT id, title, text, url FROM posts ORDER BY timee DESC")
+            res = self.__cur.fetchall()
+            if res:
+                return res
+        except sqlite3.Error as e:
+            print('Ошибка получения статьи из БД' + str(e))
+        return []
+
+    def get_feedbacks_of_a_user(self, user_id):
+        try:
+            self.__cur.execute(f"SELECT title, body, url, created FROM feedbacks JOIN users ON users.id = "
+                               f"feedbacks.author_id WHERE author_id = {user_id} ORDER BY created DESC")
+            res = self.__cur.fetchall()
+            if res:
+                return res
+        except sqlite3.Error as e:
+            print('Ошибка получения отзывов из БД' + str(e))
+        return []
 
     def add_user(self, username, email, hpsw):
         try:
@@ -86,18 +97,20 @@ class FDataBase:
             return False
         return True
 
-    def get_user_by_name(self, name):
+    def get_user_by_name(self, username):
         try:
-            self.__cur.execute(f'SELECT * FROM users WHERE username = "{name}" LIMIT 1')
+            self.__cur.execute(f'SELECT * FROM users WHERE username = "{username}" LIMIT 1')
             res = self.__cur.fetchone()
+            print(res, flush=True)
             if not res:
                 print('Пользователь не найден')
                 return False
             return res
         except sqlite3.Error as e:
-            print('Ошибка получения данных из БД' + str(e))
-
+            print('Ошибка получения данных из БД ' + str(e))
         return False
+
+
 
     # def update_user_avatar(self, avatar, user_id):
     #     if not avatar:

@@ -24,15 +24,15 @@ def load_user(user_id):
     return UserLogin().fromDB(user_id, FDataBase(get_db()))  # int(user_id)??
 
 
-# @auth.before_app_request
-# def load_logged_in_user():
-#     """Checking if there is a user in a session. If it is, user's data are collected from database and stored in a
-#     session (before each request!) """
-#     if session.get('user_id') is None:
-#         g.user = None
-#     else:
-#         g.user = get_db().execute('''SELECT * FROM users WHERE id = ?''', (session.get('user_id'),)).fetchone()
-#
+@auth.before_app_request
+def load_logged_in_user():
+    """Checking if there is a user in a session. If it is, user's data are collected from database and stored in a
+    session (before each request!) """
+    if session.get('user_id') is None:
+        g.user = None
+    else:
+        g.user = get_db().execute('''SELECT * FROM users WHERE id = ?''', (session.get('user_id'),)).fetchone()
+
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
@@ -75,8 +75,8 @@ def login():
         # user = db.execute('''SELECT * FROM users WHERE username = ?''', (form.username.data,)).fetchone()
         user = FDataBase(get_db()).get_user_by_name(form.username.data)
         if user and check_password_hash(user['password'], form.psw.data):
-            # session.clear()
-            # session['user_id'] = user['id']
+            session.clear()
+            session['user_id'] = user['id']
 
             # registers the user as logged in, so that means that any future pages the user navigates to will have
             # the 'current_user' variable set to that user
@@ -96,17 +96,17 @@ def logout():
     """Logging out of session and deleting user's data"""
     # if not session.get('user_id'):
     #     return redirect(url_for('auth.login'))
-    # session.clear()
+    session.clear()
     logout_user()
     flash('Вы вышли из аккаунта', 'success')
     return redirect(url_for('index'))
 
 
-def login_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('auth.login'))
-        return view(**kwargs)
-
-    return wrapped_view
+# def login_required(view):
+#     @functools.wraps(view)
+#     def wrapped_view(**kwargs):
+#         if g.user is None:
+#             return redirect(url_for('auth.login'))
+#         return view(**kwargs)
+#
+#     return wrapped_view

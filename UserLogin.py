@@ -15,8 +15,8 @@ class UserLogin(UserMixin):
         """a method that returns a unique identifier for the user as a string"""
         return str(self.__user['id'])
 
-    # def get_name(self):
-    #     return self.__user['name'] if self.__user else 'Без имени'
+    def get_name(self):
+        return self.__user['name'] if self.__user else 'Без имени'
 
     # def get_email(self):
     #     return self.__user['email'] if self.__user else 'Без email'
