@@ -364,6 +364,9 @@ a {
     target:blank;
     color:Chocolate;
     }
+a.leave {
+    text-decoration: none;
+    }
 
 li.username {
     color: Sienna

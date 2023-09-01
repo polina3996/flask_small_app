@@ -2,6 +2,8 @@ import math
 import sqlite3
 import time
 
+from flask_login import current_user
+
 
 class FDataBase:
     def __init__(self, db):
@@ -20,25 +22,16 @@ class FDataBase:
             print('Ошибка получения данных из БД' + str(e))
             raise e
 
-    # def add_post(self, title, text, url):
-    #     try:
-    #         self.__cur.execute(
-    #             f'SELECT COUNT() as "count" FROM posts WHERE url LIKE "{url}"')  # урл должен совпадать с переданным
-    #         res = self.__cur.fetchone()
-    #         if res['count'] > 0:
-    #             print('Статья с таким url уже существует')
-    #             return False
-
-    # base = url_for('static', filename='images_html')
-    # text = re.sub(r"(?P<tag><img\s+[^>]*src=)(?P<quote>[\"'])(?P<url>.+?)(?P=quote)>", "\\g<tag>" + base + "/\\g<url>>", res['text']) #модифицируем путь к картинкам, чтобы добавился еще каталог и подкаталог к ссылке
-
-    #     tm = math.floor(time.time())
-    #     self.__cur.execute('''INSERT INTO posts VALUES(NULL, ?, ?, ?, ?)''', (title, text, url, tm))
-    #     self.__db.commit()
-    # except sqlite3.Error as e:
-    #     print('Ошибка добавления статьи в БД' + str(e))
-    #     return False
-    # return True
+    def add_post(self, title, body):
+        try:
+            author_id = current_user.get_id() #g.user['id']?
+            created = math.floor(time.time())
+            self.__cur.execute('''INSERT INTO feedbacks VALUES(NULL, ?, ?, ?, ?)''', (author_id, title, body, created))
+            self.__db.commit()
+        except sqlite3.Error as e:
+            print('Ошибка добавления статьи в БД' + str(e))
+            return False
+        return True
 
     # def get_post(self, alias):
     #     try:

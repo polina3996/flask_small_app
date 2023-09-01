@@ -4,10 +4,12 @@ from flask_login import UserMixin
 
 class UserLogin(UserMixin):
     def fromDB(self, user_id, db):
+        """Taking a user from a database"""
         self.__user = db.get_user(user_id)
         return self
 
     def create(self, user):
+        """Creating a new user"""
         self.__user = user
         return self
 

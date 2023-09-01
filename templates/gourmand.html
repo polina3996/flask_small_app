@@ -9,7 +9,7 @@
      <ul class="mainmenu">
           <li><a href="{{ url_for('index') }}">Главная</a>
               {% if current_user.is_authenticated %}
-            <li><span class="username"><a href="{{ url_for('profile', username=current_user.username) }}">{{ current_user.username }}</a></span>
+            <li><span class="username"><a href="{{ url_for('profile', username=g.user.username) }}">{{ g.user.username }}</a></span>
             <li><a href="{{ url_for('auth.logout') }}">Выйти</a>
           {% else %}
             <li><a href="{{ url_for('auth.login') }}">Авторизация</a>
@@ -49,8 +49,8 @@
 В ресторане “Gourmand” можно заказать еду на вынос и доставку в отель.</h2>
 
             <div class="feed">
-                <div><a href="{{ url_for('blueprint_prof_feed.leave_feedback')}}">Оставить отзыв</a></div>
-                <div><a href="{{ url_for('blueprint_prof_feed.all_feedbacks')}}">Список отзывов о ресторане</a></div>
+                <div><a href="{{ url_for('feed.leave_feedback')}}">Оставить отзыв</a></div>
+
             </div>
 
             <p class="contacts"><u>Контакты:</u>

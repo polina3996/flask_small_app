@@ -13,7 +13,6 @@ CREATE TABLE IF NOT EXISTS feedbacks
     author_id INTEGER NOT NULL,
     title text NOT NULL,
     body text NOT NULL,
-    url text NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (author_id) REFERENCES users (id)
 );
