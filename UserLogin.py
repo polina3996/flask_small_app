@@ -18,26 +18,26 @@ class UserLogin(UserMixin):
     def get_name(self):
         return self.__user['name'] if self.__user else 'Без имени'
 
-    # def get_email(self):
-    #     return self.__user['email'] if self.__user else 'Без email'
+    def get_email(self):
+        return self.__user['email'] if self.__user else 'Без email'
 
-    # def get_avatar(self, app):
-    #     img = None
-    #     if not self.__user['avatar']:
-    #         try:
-    #             with app.open_resource(app.root_path + url_for('static', filename='images/default.png'), 'rb') as f:
-    #                 img = f.read()
-    #         except FileNotFoundError as e:
-    #             print('Не найден аватар по умолчанию: ' + str(e))
-    #     else:
-    #         img = self.__user['avatar']
-    #     return img
+    def get_avatar(self, app):
+        img = None
+        if not self.__user['avatar']:
+            try:
+                with app.open_resource(app.root_path + url_for('static', filename='images/default.png'), 'rb') as f:
+                    img = f.read()
+            except FileNotFoundError as e:
+                print('Не найден аватар по умолчанию: ' + str(e))
+        else:
+            img = self.__user['avatar']
+        return img
 
-    # def verify_ext(self, filename):
-    #     ext = filename.rsplit('.', 1)[1]
-    #     if ext == 'png' or ext == 'PNG':
-    #         return True
-    #     return False
+    def verify_ext(self, filename):
+        ext = filename.rsplit('.', 1)[1]
+        if ext == 'png' or ext == 'PNG':
+            return True
+        return False
 
     # already exist in UserMixin
 

@@ -1,6 +1,6 @@
 import functools
 from flask import Blueprint, request, g, redirect, url_for, flash, render_template, session
-from flask_login import LoginManager, current_user, login_user, logout_user
+from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 
 from FDataBase import FDataBase
 from UserLogin import UserLogin
@@ -39,7 +39,7 @@ def register():
     """Registration page handler"""
     #if session.get('user_id'):
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('profile', username=g.user['username']))
 
     # if request.method is POST
     form = RegisterForm()
@@ -65,7 +65,7 @@ def login():
     """Authorization page handler"""
     # if session.get('user_id'):
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('profile', username=g.user['username']))
 
     # if request.method is POST
     form = LoginForm()
@@ -92,8 +92,9 @@ def login():
 
 
 @auth.route('/logout')
+@login_required
 def logout():
-    """Logging out of session and deleting user's data"""
+    """Logging out of session and deleting user's data. If the user is not logged in, first send him to authorization"""
     # if not session.get('user_id'):
     #     return redirect(url_for('auth.login'))
     session.clear()

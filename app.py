@@ -1,15 +1,13 @@
 import os
-import sqlite3
 from datetime import datetime
-
 from flask import Flask, render_template, session, url_for, request, flash, redirect, g, make_response
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user, login_required
 import db
 from FDataBase import FDataBase
 from UserLogin import UserLogin
 from instance.config import SECRET_KEY
 from auth import auth as auth_bp
-from flask_login import current_user, login_required
+
 
 login_manager = LoginManager()
 # redirects to login page when trying to access must-be-authorized pages
@@ -61,6 +59,7 @@ def create_app(test_config=None):
     def index():
         """Main page handler"""
         return render_template('index.html')
+
     @app.route('/gourmand')
     def gourmand():
         """Restaurant 'Gourmand' page handler"""
@@ -95,60 +94,74 @@ def create_app(test_config=None):
     @login_required
     def profile(username):
         """Opens a profile page only for authorized users"""
-        #user = FDataBase(db.get_db()).get_user_by_name(username)
-        #name, email = FDataBase(db.get_db()).get_user_by_name(username)
-        #title, body, url, created = FDataBase(db.get_db()).get_feedbacks_of_a_user(current_user.get_id())
-        return render_template('profile.html') # feedbacks=feedbacks)
-
-    def verify_ext(filename):
-        """Verifies the extension of the file is 'png'"""
-        ext = filename.rsplit('.', 1)[1]
-        if ext == 'png' or ext == 'PNG':
-            return True
-        return False
+        # user = FDataBase(db.get_db()).get_user_by_name(username)
+        # name, email = FDataBase(db.get_db()).get_user_by_name(username)
+        # title, body, url, created = FDataBase(db.get_db()).get_feedbacks_of_a_user(current_user.get_id())
+        return render_template('profile.html')  # feedbacks=feedbacks)
 
     @app.route('/userava')
     @login_required
     def userava():
         """Returns an image in PNG-format"""
-        dbase = get_db()
-        user = dbase.execute('''SELECT * FROM users WHERE id = ?''', (session.get('user_id'),)).fetchone()
-        img = None
-        if not user['avatar']:
-            try:
-                with open('flask_small_app/static/images/default.png', 'rb') as f:
-                    print('Аватар найден')
-                    img = f.read()
-            except FileNotFoundError as e:
-                print('Не найден аватар по умолчанию: ' + str(e))
-            else:
-                img = user['avatar']
+        img = current_user.get_avatar(app)
         if not img:
             return ""
-        resp = make_response(img)
-        resp.headers['Content-Type'] = 'image/png'
-        return resp
+        h = make_response(img)
+        h.headers['Content-Type'] = 'image/png'
+        return h
+        # dbase = get_db()
+        # user = dbase.execute('''SELECT * FROM users WHERE id = ?''', (session.get('user_id'),)).fetchone()
+        # img = None
+        # if not user['avatar']:
+        #     try:
+        #         with open('flask_small_app/static/images/default.png', 'rb') as f:
+        #             print('Аватар найден')
+        #             img = f.read()
+        #     except FileNotFoundError as e:
+        #         print('Не найден аватар по умолчанию: ' + str(e))
+        #     else:
+        #         img = user['avatar']
+        # if not img:
+        #     return ""
+        # resp = make_response(img)
+        # resp.headers['Content-Type'] = 'image/png'
+        # return resp
 
     @app.route('/upload', methods=['POST', 'GET'])
     @login_required
     def upload():
         """Uploads an image into user's profile"""
-        dbase = get_db()
-        user = dbase.execute('''SELECT * FROM users WHERE id = ?''', (session.get('user_id'),)).fetchone()
         if request.method == 'POST':
             file = request.files['file']
-            if file and verify_ext(file.filename):
+            if file and current_user.verify_ext(file.filename):
                 try:
                     img = file.read()
-                    dbase.execute(f'UPDATE users SET avatar = ? WHERE id = ?', (sqlite3.Binary(img), user['id']))
-                    dbase.commit()
-                except sqlite3.Error as e:
-                    flash('Ошибка обновления аватара', 'error')
+                    res = FDataBase(db.get_db()).update_user_avatar(img, session['user_id'])
+                    if not res:
+                        flash('Ошибка обновления аватара', 'error')
+                    flash('Аватар обновлен', 'success')
                 except FileNotFoundError as e:
                     flash('Ошибка чтения файла', 'error')
             else:
                 flash('Ошибка обновления аватара', 'error')
-        flash('Аватар обновлен', 'success')
-        return redirect(url_for('profile'))
+
+        return redirect(url_for('profile', username=g.user['username']))
+        # dbase = get_db()
+        # user = dbase.execute('''SELECT * FROM users WHERE id = ?''', (session.get('user_id'),)).fetchone()
+        # if request.method == 'POST':
+        #     file = request.files['file']
+        #     if file and verify_ext(file.filename):
+        #         try:
+        #             img = file.read()
+        #             dbase.execute(f'UPDATE users SET avatar = ? WHERE id = ?', (sqlite3.Binary(img), user['id']))
+        #             dbase.commit()
+        #         except sqlite3.Error as e:
+        #             flash('Ошибка обновления аватара', 'error')
+        #         except FileNotFoundError as e:
+        #             flash('Ошибка чтения файла', 'error')
+        #     else:
+        #         flash('Ошибка обновления аватара', 'error')
+        # flash('Аватар обновлен', 'success')
+        # return redirect(url_for('profile'))
 
     return app

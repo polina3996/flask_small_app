@@ -10,7 +10,7 @@ class FDataBase:
 
     def get_user(self, user_id):
         try:
-            self.__cur.execute(f'SELECT name FROM users WHERE id = {user_id} LIMIT 1')
+            self.__cur.execute(f'SELECT * FROM users WHERE id = {user_id} LIMIT 1')
             res = self.__cur.fetchone()
             if not res:
                 print('Пользователь не найден')
@@ -18,18 +18,7 @@ class FDataBase:
             return res
         except sqlite3.Error as e:
             print('Ошибка получения данных из БД' + str(e))
-        return False
-
-    # def get_menu(self):
-    #     sql = '''SELECT * FROM mainmenu'''
-    #     try:
-    #         self.__cur.execute(sql)
-    #         res = self.__cur.fetchall() #
-    #         if res:
-    #             return res
-    #     except:
-    #         print('Ошибка чтения из БД')
-    #     return []
+            raise e
 
     # def add_post(self, title, text, url):
     #     try:
@@ -61,15 +50,15 @@ class FDataBase:
     #         print('Ошибка получения статьи из БД' + str(e))
     #     return (False, False)
 
-    def get_posts_anonce(self):
-        try:
-            self.__cur.execute(f"SELECT id, title, text, url FROM posts ORDER BY timee DESC")
-            res = self.__cur.fetchall()
-            if res:
-                return res
-        except sqlite3.Error as e:
-            print('Ошибка получения статьи из БД' + str(e))
-        return []
+    # def get_posts_anonce(self):
+    #     try:
+    #         self.__cur.execute(f"SELECT id, title, text, url FROM posts ORDER BY timee DESC")
+    #         res = self.__cur.fetchall()
+    #         if res:
+    #             return res
+    #     except sqlite3.Error as e:
+    #         print('Ошибка получения статьи из БД' + str(e))
+    #     return []
 
     def get_feedbacks_of_a_user(self, user_id):
         try:
@@ -110,16 +99,14 @@ class FDataBase:
             print('Ошибка получения данных из БД ' + str(e))
         return False
 
-
-
-    # def update_user_avatar(self, avatar, user_id):
-    #     if not avatar:
-    #         return False
-    #     try:
-    #         binary = sqlite3.Binary(avatar)
-    #         self.__cur.execute(f'''UPDATE users SET avatar = ? WHERE id = ?''', (binary, user_id))
-    #         self.__db.commit()
-    #     except sqlite3.Error as e:
-    #         print('Ошибка обновления аватара в БД: ' + str(e))
-    #         return False
-    #     return True
+    def update_user_avatar(self, avatar, user_id):
+        if not avatar:
+            return False
+        try:
+            binary = sqlite3.Binary(avatar)
+            self.__cur.execute(f'''UPDATE users SET avatar = ? WHERE id = ?''', (binary, user_id))
+            self.__db.commit()
+        except sqlite3.Error as e:
+            print('Ошибка обновления аватара в БД: ' + str(e))
+            return False
+        return True
