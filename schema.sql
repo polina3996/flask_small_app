@@ -11,10 +11,12 @@ CREATE TABLE IF NOT EXISTS feedbacks
 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     author_id INTEGER NOT NULL,
+    rest_id INTEGER NOT NULL,
     title text NOT NULL,
     body text NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (author_id) REFERENCES users (id)
+    FOREIGN KEY (author_id) REFERENCES users (id),
+    FOREIGN KEY (rest_id) REFERENCES restaurants (id)
 );
 
 CREATE TABLE IF NOT EXISTS restaurants

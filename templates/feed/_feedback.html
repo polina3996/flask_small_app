@@ -1,10 +1,10 @@
 <table>
         <tr valign="top">
-            <td><img src="{{ url_for('userava') }}"></td>
+            <td><img class="feedback" src="{{ url_for('userava') }}"></td>
             <td>
-                <a href="{{ url_for('show_feedback', alias=f.url)}}">{{f.title}}</a>
+                <a href="{{ url_for('feed.show_feedback', feedback_id=f.id)}}">Отзыв "{{f.title}}" на ресторан "{{f.rest_title}}"</a>
                 <p>От {{f.created.strftime('%d-%m-%Y')}}</p>
-                <p class="annonce">{{ (f.body | striptags) [:50] }}</p>
+                <p class="annonce">{{ (f.body | striptags) [:50] }}...</p>
             </td>
         </tr>
     </table>

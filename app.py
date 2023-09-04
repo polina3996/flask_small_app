@@ -7,6 +7,7 @@ from FDataBase import FDataBase
 from UserLogin import UserLogin
 from instance.config import SECRET_KEY
 from auth import auth as auth_bp
+from feed import feed as feed_bp
 
 
 login_manager = LoginManager()
@@ -34,8 +35,9 @@ def create_app(test_config=None):
 
     login_manager.init_app(app)
 
-    # registration of a blueprint 'auth.py'
+    # registration of blueprints
     app.register_blueprint(auth_bp)
+    app.register_blueprint(feed_bp)
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -94,10 +96,8 @@ def create_app(test_config=None):
     @login_required
     def profile(username):
         """Opens a profile page only for authorized users"""
-        # user = FDataBase(db.get_db()).get_user_by_name(username)
-        # name, email = FDataBase(db.get_db()).get_user_by_name(username)
-        # title, body, url, created = FDataBase(db.get_db()).get_feedbacks_of_a_user(current_user.get_id())
-        return render_template('profile.html')  # feedbacks=feedbacks)
+        my_feedbacks = FDataBase(db.get_db()).get_feedbacks_of_a_user(g.user['id']) #(current_user.get_id())
+        return render_template('profile.html', my_feedbacks=my_feedbacks)
 
     @app.route('/userava')
     @login_required
