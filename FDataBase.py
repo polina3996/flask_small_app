@@ -9,6 +9,19 @@ class FDataBase:
         self.__db = db
         self.__cur = db.cursor()
 
+    def get_restaurant(self, rest_id):
+        """Takes a restaurant from the database by its id"""
+        try:
+            self.__cur.execute(f'SELECT * FROM restaurants WHERE id = {rest_id} LIMIT 1')
+            res = self.__cur.fetchone()
+            if not res:
+                print('Ресторан не найден')
+                return False
+            return res
+        except sqlite3.Error as e:
+            print('Ошибка получения данных из БД' + str(e))
+            raise e
+
     def add_user(self, username, email, hpsw):
         """Adds a user to the database"""
         try:
@@ -67,14 +80,14 @@ class FDataBase:
                                (author_id, rest_id, title, body, created))
             self.__db.commit()
         except sqlite3.Error as e:
-            print('Ошибка добавления статьи в БД' + str(e))
-            raise e
+            print('Ошибка добавления отзыва в БД' + str(e))
         return True
 
     def get_feedbacks_of_a_user(self, user_id):
         """Takes all feedbacks of the user"""
         try:
-            self.__cur.execute(f"SELECT f.id, f.title, r.title AS rest_title, f.created, f.body FROM feedbacks AS f "
+            self.__cur.execute(f"SELECT f.id, f.title, r.title AS rest_title, f.created, f.body, f.rest_id FROM "
+                               f"feedbacks AS f "
                                f"JOIN restaurants AS r ON r.id = f.rest_id WHERE f.author_id = {user_id} ORDER "
                                f"BY created DESC")
             res = self.__cur.fetchall()
@@ -87,8 +100,9 @@ class FDataBase:
     def get_feedback(self, feedback_id):
         """One feedback is taken from the database"""
         try:
-            self.__cur.execute(f"SELECT u.username, r.id, f.title, f.body, f.created FROM feedbacks AS f JOIN users "
-                               f"as u ON u.id=f.author_id JOIN restaurants as r ON f.rest_d=r.id WHERE f.id = {feedback_id}  LIMIT 1")
+            self.__cur.execute(f"SELECT u.username, f.author_id, f.title, f.body, f.created, r.title, f.rest_id "
+                               f"FROM users AS u JOIN feedbacks AS f ON u.id = f.author_id "
+                               f"JOIN restaurants AS r ON f.rest_id = r.id WHERE f.id = {feedback_id} LIMIT 1")
             res = self.__cur.fetchone()
             if res:
                 return res
@@ -105,6 +119,26 @@ class FDataBase:
     #     except sqlite3.Error as e:
     #         print('Ошибка получения статьи из БД' + str(e))
     #     return []
+
+    def update_my_feedback(self, feedback_id, new_title, new_body):
+        try:
+            self.__cur.execute(f'''UPDATE feedbacks SET title = ? WHERE id = ?''', (new_title, feedback_id))
+            self.__cur.execute(f'''UPDATE feedbacks SET body = ? WHERE id = ?''', (new_body, feedback_id))
+            self.__db.commit()
+        except sqlite3.Error as e:
+            print('Ошибка обновления отзыва в БД: ' + str(e))
+            return False
+        return True
+
+    def delete_my_feedback(self, feedback_id):
+        """Deletes a user's feedback"""
+        try:
+            self.__cur.execute(f'DELETE FROM feedbacks WHERE id = ?', (feedback_id,))
+            self.__db.commit()
+        except sqlite3.Error as e:
+            print('Ошибка удаления отзыва в БД: ' + str(e))
+            return False
+        return True
 
     def update_user_avatar(self, avatar, user_id):
         """Updates user's avatar in the database"""
