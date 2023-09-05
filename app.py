@@ -9,7 +9,6 @@ from instance.config import SECRET_KEY
 from auth import auth as auth_bp
 from feed import feed as feed_bp
 
-
 login_manager = LoginManager()
 # redirects to login page when trying to access must-be-authorized pages
 login_manager.login_view = 'auth.login'
@@ -19,7 +18,6 @@ login_manager.login_message_category = 'success'
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
-
     app.config.from_mapping(SECRET_KEY=SECRET_KEY, DATABASE=os.path.join(app.instance_path, 'flask_small_app.sqlite'))
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True)
@@ -92,11 +90,11 @@ def create_app(test_config=None):
         """Restaurant 'Mangal' page handler"""
         return render_template('mangal.html')
 
-    @app.route('/profile/<username>')
+    @app.route('/profile/<username>')  # just '/profile' -> page not found
     @login_required
     def profile(username):
         """Opens a profile page only for authorized users"""
-        my_feedbacks = FDataBase(db.get_db()).get_feedbacks_of_a_user(g.user['id']) #(current_user.get_id())
+        my_feedbacks = FDataBase(db.get_db()).get_feedbacks_of_a_user(g.user['id'])  # (current_user.get_id())
         return render_template('profile.html', my_feedbacks=my_feedbacks)
 
     @app.route('/userava')
@@ -109,23 +107,6 @@ def create_app(test_config=None):
         h = make_response(img)
         h.headers['Content-Type'] = 'image/png'
         return h
-        # dbase = get_db()
-        # user = dbase.execute('''SELECT * FROM users WHERE id = ?''', (session.get('user_id'),)).fetchone()
-        # img = None
-        # if not user['avatar']:
-        #     try:
-        #         with open('flask_small_app/static/images/default.png', 'rb') as f:
-        #             print('Аватар найден')
-        #             img = f.read()
-        #     except FileNotFoundError as e:
-        #         print('Не найден аватар по умолчанию: ' + str(e))
-        #     else:
-        #         img = user['avatar']
-        # if not img:
-        #     return ""
-        # resp = make_response(img)
-        # resp.headers['Content-Type'] = 'image/png'
-        # return resp
 
     @app.route('/upload', methods=['POST', 'GET'])
     @login_required
@@ -145,23 +126,7 @@ def create_app(test_config=None):
             else:
                 flash('Ошибка обновления аватара', 'error')
 
+        # after all + if it's GET-request
         return redirect(url_for('profile', username=g.user['username']))
-        # dbase = get_db()
-        # user = dbase.execute('''SELECT * FROM users WHERE id = ?''', (session.get('user_id'),)).fetchone()
-        # if request.method == 'POST':
-        #     file = request.files['file']
-        #     if file and verify_ext(file.filename):
-        #         try:
-        #             img = file.read()
-        #             dbase.execute(f'UPDATE users SET avatar = ? WHERE id = ?', (sqlite3.Binary(img), user['id']))
-        #             dbase.commit()
-        #         except sqlite3.Error as e:
-        #             flash('Ошибка обновления аватара', 'error')
-        #         except FileNotFoundError as e:
-        #             flash('Ошибка чтения файла', 'error')
-        #     else:
-        #         flash('Ошибка обновления аватара', 'error')
-        # flash('Аватар обновлен', 'success')
-        # return redirect(url_for('profile'))
 
     return app
