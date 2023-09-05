@@ -83,12 +83,14 @@ class FDataBase:
             print('Ошибка добавления отзыва в БД' + str(e))
         return True
 
-    def get_feedbacks_of_a_user(self, user_id):
+    def get_feedbacks_of_a_user(self, username):
         """Takes all feedbacks of the user"""
         try:
             self.__cur.execute(f"SELECT f.id, f.title, r.title AS rest_title, f.created, f.body, f.rest_id FROM "
-                               f"feedbacks AS f "
-                               f"JOIN restaurants AS r ON r.id = f.rest_id WHERE f.author_id = {user_id} ORDER "
+                               f"restaurants AS r "
+                               f"JOIN feedbacks AS f ON r.id = f.rest_id "
+                               f" JOIN users AS u ON f.author_id=u.id "
+                               f" WHERE u.username = '{username}' ORDER "
                                f"BY created DESC")
             res = self.__cur.fetchall()
             if res:

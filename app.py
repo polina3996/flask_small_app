@@ -46,7 +46,7 @@ def create_app(test_config=None):
     def before_request():
         """Sets the time a user was last seen in an application"""
         if current_user.is_authenticated:
-            current_user.last_seen = datetime.utcnow()
+            current_user.last_seen = datetime.utcnow() # отображает всегда меня. на стр др юзера - надо его!!
             db.get_db().commit()
 
     @app.errorhandler(404)
@@ -70,19 +70,31 @@ def create_app(test_config=None):
     @login_required
     def profile(username):
         """Opens a profile page only for authorized users"""
-        my_feedbacks = FDataBase(db.get_db()).get_feedbacks_of_a_user(g.user['id'])  # (current_user.get_id())
-        return render_template('profile.html', my_feedbacks=my_feedbacks)
+        my_feedbacks = FDataBase(db.get_db()).get_feedbacks_of_a_user(username)
+        user = FDataBase(db.get_db()).get_user_by_name(username)
+        return render_template('profile.html', my_feedbacks=my_feedbacks, user=user)
 
-    @app.route('/userava')
+    @app.route('/userava/<username>')
     @login_required
-    def userava():
+    def userava(username):
         """Returns an image in PNG-format"""
-        img = current_user.get_avatar(app)
-        if not img:
-            return ""
-        h = make_response(img)
-        h.headers['Content-Type'] = 'image/png'
-        return h
+        user = FDataBase(db.get_db()).get_user_by_name(username)
+        if user:
+            img = None
+            if not user['avatar']:
+                try:
+                    with open('static/images/default.png', 'rb') as f:
+                        img = f.read()
+                except FileNotFoundError as e:
+                    print('Не найден аватар по умолчанию: ' + str(e))
+            else:
+                img = user['avatar']
+            h = make_response(img)
+            h.headers['Content-Type'] = 'image/png'
+            return h
+        else:
+            flash('Аватарка не найдена, так как пользователя не существует', category='error')
+            return redirect(url_for('index'))
 
     @app.route('/upload', methods=['POST', 'GET'])
     @login_required

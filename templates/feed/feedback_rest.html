@@ -21,7 +21,7 @@
 
     <table>
         <tr valign="top">
-            <td><img class="feedback" src="{{ url_for('userava') }}"></td>
+            <td><img class="feedback" src="{{ url_for('userava', username=author) }}"></td>
             <td>
                 <p>Отзыв "{{title}}" на ресторан <a href="{{ url_for('restaurant', rest_id=rest_id) }}">"{{restaurant}}"</a></p>
                 <p>Автор: <a href="{{ url_for('profile', username=author) }}">{{author}}</a></p>
