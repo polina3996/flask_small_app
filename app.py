@@ -60,35 +60,11 @@ def create_app(test_config=None):
         """Main page handler"""
         return render_template('index.html')
 
-    @app.route('/gourmand')
-    def gourmand():
-        """Restaurant 'Gourmand' page handler"""
-        return render_template('gourmand.html')
-
-    @app.route('/alaverdi')
-    def alaverdi():
-        """Restaurant 'Alaverdi' page handler"""
-        return render_template('alaverdi.html')
-
-    @app.route('/heart_of_batumi')
-    def heart_of_batumi():
-        """Restaurant 'Heart of Batumi' page handler"""
-        return render_template('heart_of_batumi.html')
-
-    @app.route('/panorama')
-    def panorama():
-        """Restaurant 'Panorama' page handler"""
-        return render_template('panorama.html')
-
-    @app.route('/tavaduri')
-    def tavaduri():
-        """Restaurant 'Tavaduri' page handler"""
-        return render_template('tavaduri.html')
-
-    @app.route('/mangal')
-    def mangal():
-        """Restaurant 'Mangal' page handler"""
-        return render_template('mangal.html')
+    @app.route('/restaurant/<rest_id>')
+    def restaurant(rest_id):
+        """Restaurant page handler"""
+        rest_id, title, picture, url = FDataBase(db.get_db()).get_restaurant(rest_id)
+        return render_template('rest.html', rest_id=rest_id, title=title, url=url)
 
     @app.route('/profile/<username>')  # just '/profile' -> page not found
     @login_required

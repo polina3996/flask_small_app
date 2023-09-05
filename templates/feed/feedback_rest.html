@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}"/>
+        <title>Отзыв</title>
+        <meta name='Отзыв' content='отзыв'>
+    </head>
+    <body>
+    {%- block mainmenu -%}
+        <ul class="mainmenu">
+            {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('index') }}">Главная</a>
+                <li class="username"><a href="{{ url_for('profile', username=g.user.username) }}">Профиль</a></li>
+                <li><a href="{{ url_for('auth.logout') }}">Выйти</a>
+            {% endif %}
+      </ul>
+    {% endblock mainmenu -%}
+
+    {% for cat, msg in get_flashed_messages(True) %}
+    <div class="flash {{cat}}">{{msg}}</div>
+    {% endfor %}
+
+    <table>
+        <tr valign="top">
+            <td><img class="feedback" src="{{ url_for('userava') }}"></td>
+            <td>
+                <p>Отзыв "{{title}}" на ресторан <a href="{{ url_for('restaurant', rest_id=rest_id) }}">"{{restaurant}}"</a></p>
+                <p>Автор: <a href="{{ url_for('profile', username=author) }}">{{author}}</a></p>
+                <p>От {{created.strftime('%d-%m-%Y')}}</p>
+                <p class="annonce">{{ (body | striptags) }}</p>
+            </td>
+            {% if g.user['id'] == author_id %}
+            <td>
+                <a href="{{ url_for('feed.update_feedback', feedback_id=feedback_id) }}">Редактировать</a>
+                <a href="{{ url_for('feed.delete_feedback', feedback_id=feedback_id) }}">Удалить</a>
+            </td>
+            {% endif %}
+        </tr>
+    </table>
+     <footer>
+            <p class="footer">Автор: Полина Кириченко</p>
+        </footer>
+    </body>
+</html>

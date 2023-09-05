@@ -14,13 +14,13 @@
             {% endif %}
       </ul>
       {% endblock mainmenu -%}
-        <header><h1 class="login">Новый отзыв на ресторан  <a class="leave" href="request.headers.get('Referer')">{{request.headers.get('Referer').split('/')[3]}}</a></h1>
+        <header><h1 class="login">Новый отзыв на ресторан  <a class="leave" href="{{ url_for('restaurant', rest_id=rest_id) }}">{{rest_title}}</a></h1>
         <main>
             {% for cat, msg in get_flashed_messages(True) %}
                 <div class="flash {{cat}}">{{msg}}</div>
             {% endfor %}
 
-              <form action="{{ url_for('feed.leave_feedback', rest_id=request.args.get('rest_id')) }}" method="post" class="form-contact">
+              <form action="{{ url_for('feed.leave_feedback', rest_id=rest_id) }}" method="post" class="form-contact">
                 <p><label for="title">Заголовок отзыва: </label>
                     <input id="title" name="title" value="{{ request.form['title'] }}" required />
                 <p><label for="body">Текст отзыва: </label>

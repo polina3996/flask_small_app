@@ -23,7 +23,8 @@ CREATE TABLE IF NOT EXISTS restaurants
 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title text UNIQUE NOT NULL,
-    picture BLOB DEFAULT NULL
+    picture BLOB DEFAULT NULL,
+    url text NOT NULL
 )
 
 

@@ -25,9 +25,9 @@
         <main>
             <table class="review">
               <tr>
-                  <th><u><a href="{{ url_for('gourmand') }}">Гурман</a></u></th>
-                  <th><u><a href="{{ url_for('alaverdi') }}">Алаверди</a></u></th>
-                  <th><u><a href="{{ url_for('heart_of_batumi') }}">Сердце Батуми</a></u></th>
+                  <th><u><a href="{{ url_for('restaurant', rest_id=1) }}">Гурман</a></u></th>
+                  <th><u><a href="{{ url_for('restaurant', rest_id=2) }}">Алаверди</a></u></th>
+                  <th><u><a href="{{ url_for('restaurant', rest_id=3) }}">Сердце Батуми</a></u></th>
               </tr>
               <tr>
                 <td class="review"><img src="/static/images/index_gourmand.jpg" class="review2"></td>
@@ -35,9 +35,9 @@
                 <td class="review"><img src="/static/images/index_heart_of_batumi.jpg" class="review1"></td>
               </tr>
               <tr>
-                  <th><u><a href="{{ url_for('panorama') }}">Panorama</a></u></th>
-                  <th><u><a href="{{ url_for('tavaduri') }}">Тавадури</a></u></th>
-                  <th><u><a href="{{ url_for('mangal') }}">Мангал</a></u></th>
+                  <th><u><a href="{{ url_for('restaurant', rest_id=4) }}">Panorama</a></u></th>
+                  <th><u><a href="{{ url_for('restaurant', rest_id=5) }}">Тавадури</a></u></th>
+                  <th><u><a href="{{ url_for('restaurant', rest_id=6) }}">Мангал</a></u></th>
               </tr>
               <tr>
                 <td class="review"><img src="/static/images/index_panorama.jpg" class="review2"></td>
