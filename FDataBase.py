@@ -112,15 +112,22 @@ class FDataBase:
             print('Ошибка получения отзыва из БД' + str(e))
         return ()
 
-    # def get_feedbacks_anonce(self):
-    #     try:
-    #         self.__cur.execute(f"SELECT * FROM feedbacks ORDER BY created DESC")
-    #         res = self.__cur.fetchall()
-    #         if res:
-    #             return res
-    #     except sqlite3.Error as e:
-    #         print('Ошибка получения статьи из БД' + str(e))
-    #     return []
+    def get_feedbacks_of_a_restaurant(self, rest_id):
+        """All feedbacks for the restaurant are taken from the database"""
+        try:
+            self.__cur.execute(f"SELECT f.id, f.title, u.username AS author, f.created, "
+                               f"f.body, f.author_id FROM restaurants AS r "
+                               f"JOIN feedbacks AS f ON f.rest_id=r.id "
+                               f"JOIN users AS u ON u.id=f.author_id "
+                               f"WHERE f.rest_id = {rest_id} "
+                               f"ORDER BY created DESC")
+            res = self.__cur.fetchall()
+            if res:
+                return res
+        except sqlite3.Error as e:
+            print('Ошибка получения статьи из БД' + str(e))
+            raise e
+        return []
 
     def update_my_feedback(self, feedback_id, new_title, new_body):
         try:

@@ -86,3 +86,12 @@ def delete_feedback(feedback_id):
     return render_template('feed/update_feedback.html', title=feedback['title'], rest_title=feedback['restaurant'],
                            rest_id=feedback['rest_id'],
                            feedback_id=feedback_id, body=feedback['body'])
+
+
+@feed.route('/all_feedbacks/restaurant/<rest_id>')
+@login_required
+def all_feedbacks(rest_id):
+    # only GET method
+    restaurant = FDataBase(get_db()).get_restaurant(rest_id)
+    feedbacks = FDataBase(get_db()).get_feedbacks_of_a_restaurant(rest_id)
+    return render_template('feed/all_feedbacks.html', rest_id=rest_id, feedbacks=feedbacks, restaurant=restaurant['title'])
