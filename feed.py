@@ -1,5 +1,5 @@
-from flask import Blueprint, request, flash, render_template, redirect, url_for
-from flask_login import login_required
+from flask import Blueprint, request, flash, render_template, redirect, url_for, g
+from flask_login import login_required, current_user
 from FDataBase import FDataBase
 from db import get_db
 
@@ -20,25 +20,35 @@ def leave_feedback(rest_id):
                 flash('Отзыв добавлен успешно', category='success')
                 return redirect(url_for('index'))
         else:
-            flash('Ошибка добавления отзыва', category='error')
+            flash('Ошибка ввода отзыва, он слишком короткий', category='error')
     # if request method is 'GET'
-    rest_id, title, picture, url = FDataBase(get_db()).get_restaurant(rest_id)
-    return render_template('feed/leave_feedback.html', rest_id=rest_id, rest_title=title, rest_url=url)
+    rest = FDataBase(get_db()).get_restaurant(rest_id)
+    if rest:
+        return render_template('feed/leave_feedback.html', rest_id=rest['id'], rest_title=rest['title'])
+    # restaurant doesn't exist in the database
+    else:
+        return render_template('page404.html')
 
 
 @feed.route('/feedback/<feedback_id>')
 @login_required
 def show_feedback(feedback_id):
     """Page where the full feedback s shown"""
-    author, author_id, title, body, created, restaurant, rest_id = FDataBase(get_db()).get_feedback(feedback_id)
-    return render_template('feed/feedback_rest.html', feedback_id=feedback_id, author=author, author_id=author_id, title=title, body=body, created=created, restaurant=restaurant, rest_id=rest_id)
+    # only GET-request
+    feedback = FDataBase(get_db()).get_feedback(feedback_id)
+    # feedback doesn't exist in the database
+    if feedback == ():
+        return render_template('page404.html')
+    return render_template('feed/feedback_rest.html', feedback_id=feedback_id, author=feedback['username'],
+                           author_id=feedback['author_id'],
+                           title=feedback['title'], body=feedback['body'], created=feedback['created'],
+                           restaurant=feedback['restaurant'], rest_id=feedback['rest_id'])
 
 
 @feed.route('/update_feedback/<feedback_id>', methods=['GET', 'POST'])
 @login_required
-def update_feedback(feedback_id): # доб изменение времени ?
+def update_feedback(feedback_id):  # доб изменение времени создания отзыва?
     """Page where a user corrects his feedback"""
-    author, author_id, title, body, created, restaurant, rest_id = FDataBase(get_db()).get_feedback(feedback_id)
     if request.method == 'POST':
         if len(request.form['title']) > 4 and len(request.form['body']) > 10:
             res = FDataBase(get_db()).update_my_feedback(feedback_id, request.form['title'], request.form['body'])
@@ -47,21 +57,32 @@ def update_feedback(feedback_id): # доб изменение времени ?
             else:
                 flash('Отзыв обновлен успешно', category='success')
                 return redirect(url_for('index'))
-    # if request method is GET
-    return render_template('feed/update_feedback.html', title=title, rest_title=restaurant, rest_id=rest_id, feedback_id=feedback_id, body=body)
+    # GET-request
+    feedback = FDataBase(get_db()).get_feedback(feedback_id)
+    # feedback doesn't exist in the database OR it's not user's feedback
+    if (feedback == ()) or (g.user['id'] != feedback['author_id']):
+        return render_template('page404.html')
+    return render_template('feed/update_feedback.html', title=feedback['title'], rest_title=feedback['restaurant'],
+                           rest_id=feedback['rest_id'],
+                           feedback_id=feedback_id, body=feedback['body'])
 
 
 @feed.route('/delete_feedback/<feedback_id>', methods=['GET', 'POST'])
 @login_required
 def delete_feedback(feedback_id):
     """Page where a user deletes his feedback"""
-    author, author_id, title, body, created, restaurant, rest_id = FDataBase(get_db()).get_feedback(feedback_id)
-    res = FDataBase(get_db()).delete_my_feedback(feedback_id)
-    if res:
-        flash('Отзыв удален успешно', category='success')
-        return redirect(url_for('index'))
-    else:
-        flash('Ошибка удаления отзыва', category='error')
-    return render_template('feed/update_feedback.html', title=title, rest_title=restaurant, rest_id=rest_id, feedback_id=feedback_id, body=body)
-
-
+    if request.method == 'POST':
+        res = FDataBase(get_db()).delete_my_feedback(feedback_id)
+        if res:
+            flash('Отзыв удален успешно', category='success')
+            return redirect(url_for('index'))
+        else:
+            flash('Ошибка удаления отзыва', category='error')
+    # GET-request
+    feedback = FDataBase(get_db()).get_feedback(feedback_id)
+    # feedback doesn't exist in the database OR it's not user's feedback
+    if (feedback == ()) or (g.user['id'] != feedback['author_id']):
+        return render_template('page404.html')
+    return render_template('feed/update_feedback.html', title=feedback['title'], rest_title=feedback['restaurant'],
+                           rest_id=feedback['rest_id'],
+                           feedback_id=feedback_id, body=feedback['body'])

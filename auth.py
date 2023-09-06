@@ -37,26 +37,18 @@ def load_logged_in_user():
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
     """Registration page handler"""
-    #if session.get('user_id'):
     if current_user.is_authenticated:
         return redirect(url_for('profile', username=g.user['username']))
 
-    # if request.method is POST
     form = RegisterForm()
-    #db = get_db()
 
     if form.validate_on_submit():
-        # try:
-        #     db.cursor().execute('''INSERT INTO users VALUES (NULL, ?, ?, ?, NULL)''',
-        #                         (form.username.data, form.email.data, hash,))
-        #     db.commit()
         res = FDataBase(get_db()).add_user(form.username.data, form.email.data, generate_password_hash(form.psw.data))
         if res:
             flash('Вы успешно зарегистрированы', category='success')
             return redirect(url_for('auth.login'))
-        # except db.IntegrityError:
-        #     flash(f'Пользователь {form.username.data} уже зарегистрирован', category='error')
-    # if request.method is GET or if there occurred some errors
+        else:
+            flash('Это имя или почта уже заняты', category='error')
     return render_template('auth/register.html', form=form)
 
 
@@ -74,6 +66,9 @@ def login():
     if form.validate_on_submit():
         # user = db.execute('''SELECT * FROM users WHERE username = ?''', (form.username.data,)).fetchone()
         user = FDataBase(get_db()).get_user_by_name(form.username.data)
+        if not user:
+            flash('Пользователь не найден', category='error')
+            return render_template('index.html')
         if user and check_password_hash(user['password'], form.psw.data):
             session.clear()
             session['user_id'] = user['id']

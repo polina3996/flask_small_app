@@ -1,5 +1,5 @@
 import sqlite3
-from flask import g
+from flask import g, flash
 from flask_login import current_user
 from datetime import datetime
 
@@ -35,13 +35,13 @@ class FDataBase:
                 f'SELECT COUNT() as "count" FROM users WHERE username = {username}')
             res_name = self.__cur.fetchone()
             if res_name['count'] > 0:
-                print('Пользователь с таким email уже существует')
+                print('Пользователь с таким именем уже существует')
                 return False
             self.__cur.execute('''INSERT INTO users VALUES(NULL, ?, ?, ?, NULL)''', (username, email, hpsw))
             self.__db.commit()
         except sqlite3.Error as e:
             print('Ошибка добавления пользователя в БД' + str(e))
-            return False
+            raise e
         return True
 
     def get_user(self, user_id):
@@ -62,14 +62,13 @@ class FDataBase:
         try:
             self.__cur.execute(f'SELECT * FROM users WHERE username = "{username}" LIMIT 1')
             res = self.__cur.fetchone()
-            print(res, flush=True)
             if not res:
                 print('Пользователь не найден')
                 return False
             return res
         except sqlite3.Error as e:
             print('Ошибка получения данных из БД ' + str(e))
-        return False
+            raise e
 
     def add_feedback(self, title, body, rest_id):
         """Adds the feedback to the database"""
@@ -102,7 +101,8 @@ class FDataBase:
     def get_feedback(self, feedback_id):
         """One feedback is taken from the database"""
         try:
-            self.__cur.execute(f"SELECT u.username, f.author_id, f.title, f.body, f.created, r.title, f.rest_id "
+            self.__cur.execute(f"SELECT u.username, f.author_id, f.title, f.body, f.created, r.title AS restaurant, "
+                               f"f.rest_id "
                                f"FROM users AS u JOIN feedbacks AS f ON u.id = f.author_id "
                                f"JOIN restaurants AS r ON f.rest_id = r.id WHERE f.id = {feedback_id} LIMIT 1")
             res = self.__cur.fetchone()
@@ -110,7 +110,7 @@ class FDataBase:
                 return res
         except sqlite3.Error as e:
             print('Ошибка получения отзыва из БД' + str(e))
-        return (False, False)
+        return ()
 
     # def get_feedbacks_anonce(self):
     #     try:

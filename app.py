@@ -63,8 +63,10 @@ def create_app(test_config=None):
     @app.route('/restaurant/<rest_id>')
     def restaurant(rest_id):
         """Restaurant page handler"""
-        rest_id, title, picture, url = FDataBase(db.get_db()).get_restaurant(rest_id)
-        return render_template('rest.html', rest_id=rest_id, title=title, url=url)
+        rest = FDataBase(db.get_db()).get_restaurant(rest_id)
+        if not rest:
+            return render_template('page404.html')
+        return render_template('rest.html', rest_id=rest['id'], title=rest['title'], url=rest['url'])
 
     @app.route('/profile/<username>')  # just '/profile' -> page not found
     @login_required
@@ -72,6 +74,9 @@ def create_app(test_config=None):
         """Opens a profile page only for authorized users"""
         my_feedbacks = FDataBase(db.get_db()).get_feedbacks_of_a_user(username)
         user = FDataBase(db.get_db()).get_user_by_name(username)
+        if not user:
+            flash('Пользователь не найден', category='error')
+            return render_template('index.html')
         return render_template('profile.html', my_feedbacks=my_feedbacks, user=user)
 
     @app.route('/userava/<username>')
@@ -79,6 +84,9 @@ def create_app(test_config=None):
     def userava(username):
         """Returns an image in PNG-format"""
         user = FDataBase(db.get_db()).get_user_by_name(username)
+        if not user:
+            flash('Пользователь не найден', category='error')
+            return render_template('index.html')
         if user:
             img = None
             if not user['avatar']:
@@ -109,10 +117,10 @@ def create_app(test_config=None):
                     if not res:
                         flash('Ошибка обновления аватара', 'error')
                     flash('Аватар обновлен', 'success')
-                except FileNotFoundError as e:
+                except FileNotFoundError:
                     flash('Ошибка чтения файла', 'error')
             else:
-                flash('Ошибка обновления аватара', 'error')
+                flash('Файл не существует или не соответствует формату PNG', 'error')
 
         # after all + if it's GET-request
         return redirect(url_for('profile', username=g.user['username']))
