@@ -56,7 +56,7 @@ def update_feedback(feedback_id):  # доб изменение времени с
                 flash('Ошибка обновления отзыва', category='error')
             else:
                 flash('Отзыв обновлен успешно', category='success')
-                return redirect(url_for('index'))
+                return redirect(url_for('feed.update_feedback', feedback_id=feedback_id))
     # GET-request
     feedback = FDataBase(get_db()).get_feedback(feedback_id)
     # feedback doesn't exist in the database OR it's not user's feedback

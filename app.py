@@ -1,4 +1,5 @@
 import os
+import sqlite3
 from datetime import datetime
 from flask import Flask, render_template, session, url_for, request, flash, redirect, g, make_response
 from flask_login import LoginManager, current_user, login_required
@@ -46,8 +47,13 @@ def create_app(test_config=None):
     def before_request():
         """Sets the time a user was last seen in an application"""
         if current_user.is_authenticated:
-            current_user.last_seen = datetime.utcnow() # отображает всегда меня. на стр др юзера - надо его!!
-            db.get_db().commit()
+            try:
+                db.get_db().execute(f'''UPDATE users SET visit = ? WHERE id = ?''', (datetime.utcnow(), g.user['id']))
+                db.get_db().commit()
+            except sqlite3.Error as e:
+                print('Ошибка обновления отзыва в БД: ' + str(e))
+            # current_user.visit = datetime.utcnow() # отображает всегда меня. на стр др юзера - надо его!!
+            # db.get_db().commit()
 
     @app.errorhandler(404)
     def page_not_found(error):

@@ -39,9 +39,7 @@
                 <ul class="profile-info">
                 <li>Имя: {{ user['username'] }}</li>
                 <li>Email: {{ user['email'] }}</li>
-                {% if current_user.last_seen %}
-                <li>Заходил(-а) в {{ current_user.last_seen.strftime('%H:%M %d-%m-%Y') }} по Гринвичу</li>
-                {% endif %}
+                <li>Заходил(-а) в {{ user['visit'].strftime('%H:%M %d-%m-%Y') }} по Гринвичу</li>
                 </ul>
             </td>
         </tr>

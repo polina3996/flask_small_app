@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS users
     username text UNIQUE NOT NULL,
     email text NOT NULL,
     password text NOT NULL,
-    avatar BLOB DEFAULT NULL
+    avatar BLOB DEFAULT NULL,
+    visit TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS feedbacks

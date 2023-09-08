@@ -55,16 +55,13 @@ def register():
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     """Authorization page handler"""
-    # if session.get('user_id'):
     if current_user.is_authenticated:
         return redirect(url_for('profile', username=g.user['username']))
 
     # if request.method is POST
     form = LoginForm()
-    # db = get_db()
 
     if form.validate_on_submit():
-        # user = db.execute('''SELECT * FROM users WHERE username = ?''', (form.username.data,)).fetchone()
         user = FDataBase(get_db()).get_user_by_name(form.username.data)
         if not user:
             flash('Пользователь не найден', category='error')
@@ -72,15 +69,8 @@ def login():
         if user and check_password_hash(user['password'], form.psw.data):
             session.clear()
             session['user_id'] = user['id']
-
-            # registers the user as logged in, so that means that any future pages the user navigates to will have
-            # the 'current_user' variable set to that user
             login_user(UserLogin().create(user), remember=form.remember.data)
-            # next_page = request.args.get('next')
-            #         if not next_page or url_parse(next_page).netloc != '':
-            #             next_page = url_for('index')
-            #         return redirect(next_page)
-            return redirect(request.args.get('next') or url_for('index'))
+            return redirect(request.args.get('next') or url_for('profile', username=user['username']))
         flash('Неверная пара логин/пароль', category='error')
     # if request.method is GET or if there occurred some errors
     return render_template('auth/login.html', form=form)
@@ -90,19 +80,9 @@ def login():
 @login_required
 def logout():
     """Logging out of session and deleting user's data. If the user is not logged in, first send him to authorization"""
-    # if not session.get('user_id'):
-    #     return redirect(url_for('auth.login'))
     session.clear()
     logout_user()
     flash('Вы вышли из аккаунта', 'success')
     return redirect(url_for('index'))
 
 
-# def login_required(view):
-#     @functools.wraps(view)
-#     def wrapped_view(**kwargs):
-#         if g.user is None:
-#             return redirect(url_for('auth.login'))
-#         return view(**kwargs)
-#
-#     return wrapped_view

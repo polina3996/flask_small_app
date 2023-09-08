@@ -1,6 +1,5 @@
 import sqlite3
-from flask import g, flash
-from flask_login import current_user
+from flask import g
 from datetime import datetime
 
 
@@ -32,12 +31,13 @@ class FDataBase:
                 print('Пользователь с таким email уже существует')
                 return False
             self.__cur.execute(
-                f'SELECT COUNT() as "count" FROM users WHERE username = {username}')
+                f'SELECT COUNT() as "count" FROM users WHERE username = "{username}"')
             res_name = self.__cur.fetchone()
             if res_name['count'] > 0:
                 print('Пользователь с таким именем уже существует')
                 return False
-            self.__cur.execute('''INSERT INTO users VALUES(NULL, ?, ?, ?, NULL)''', (username, email, hpsw))
+            visit = datetime.utcnow()
+            self.__cur.execute('''INSERT INTO users VALUES(NULL, ?, ?, ?, NULL, ?)''', (username, email, hpsw, visit))
             self.__db.commit()
         except sqlite3.Error as e:
             print('Ошибка добавления пользователя в БД' + str(e))
