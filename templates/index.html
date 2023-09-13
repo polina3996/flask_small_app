@@ -23,6 +23,10 @@
             {% endblock %}
 
         <main>
+            {% for cat, msg in get_flashed_messages(True) %}
+                <div class="flash {{cat}}">{{msg}}</div>
+            {% endfor %}
+
             <table class="review">
               <tr>
                   <th><u><a href="{{ url_for('restaurant', rest_id=1) }}">Гурман</a></u></th>

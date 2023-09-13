@@ -21,9 +21,9 @@
             {% endfor %}
 
               <form action="{{ url_for('feed.leave_feedback', rest_id=rest_id) }}" method="post" class="form-contact">
-                <p><label for="title">Заголовок отзыва: </label>
+                <p class="none"><label for="title">Заголовок отзыва: </label>
                     <input id="title" name="title" value="{{ request.form['title'] }}" required />
-                <p><label for="body">Текст отзыва: </label>
+                <p class="none"><label for="body">Текст отзыва: </label>
                     <p><textarea id="body" name="body"  rows=7 cols=40>{{ request.form['body'] }}</textarea>
                   <p><input type="submit" value="Сохранить" />
               </form>

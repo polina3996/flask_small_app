@@ -26,7 +26,8 @@ CREATE TABLE IF NOT EXISTS restaurants
     title text UNIQUE NOT NULL,
     picture BLOB DEFAULT NULL,
     url text NOT NULL
-)
+);
+
 
 
 

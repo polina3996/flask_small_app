@@ -22,7 +22,7 @@
     {% block header %}
     <h2>Отзывы на ресторан <a href="{{ url_for('restaurant', rest_id=rest_id) }}">"{{restaurant}}"</a></h2>
     {% if g.user %}
-        <a class="action" href="{{ url_for('feed.leave_feedback', rest_id=rest_id) }}">Новый отзыв</a>
+        <a class="new" href="{{ url_for('feed.leave_feedback', rest_id=rest_id) }}">Новый отзыв</a>
     {% endif %}
     {% endblock %}
 
@@ -34,16 +34,15 @@
             <tr valign="top">
                 <td><img class="feedback" src="{{ url_for('userava', username=f.author) }}"></td>
                 <td>
-                    <p><a href="{{ url_for('feed.show_feedback', feedback_id=f.id) }}">{{f.title}}</a></p>
-                    <p>Автор: <a href="{{ url_for('profile', username=f.author) }}">{{f.author}}</a></p>
+                    <p class="none"><a href="{{ url_for('feed.show_feedback', feedback_id=f.id) }}">{{f.title}}</a></p>
+                    <p class="none">Автор: <a href="{{ url_for('profile', username=f.author) }}">{{f.author}}</a></p>
                     <p>От {{f.created.strftime('%d-%m-%Y')}}</p>
-                    <p class="annonce">{{ (f.body | striptags) [:50] }}...</p>
+                    <p class="annonce">💬 {{ (f.body | striptags) [:50] }}...</p>
                 </td>
                 {% if g.user['id'] == f.author_id %}
                 <td>
-                    <a href="{{ url_for('feed.update_feedback', feedback_id=f.id) }}">Редактировать/Удалить</a>
+                    <a class="new" href="{{ url_for('feed.update_feedback', feedback_id=f.id) }}">Редактировать/Удалить</a>
                 </td>
-
                 {% endif %}
                 {% if not loop.last %}
                     <hr>

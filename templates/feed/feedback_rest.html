@@ -23,14 +23,14 @@
         <tr valign="top">
             <td><img class="feedback" src="{{ url_for('userava', username=author) }}"></td>
             <td>
-                <p>Отзыв "{{title}}" на ресторан <a href="{{ url_for('restaurant', rest_id=rest_id) }}">"{{restaurant}}"</a></p>
-                <p>Автор: <a href="{{ url_for('profile', username=author) }}">{{author}}</a></p>
+                <p class="none">Отзыв "{{title}}" на ресторан <a href="{{ url_for('restaurant', rest_id=rest_id) }}">"{{restaurant}}"</a></p>
+                <p class="none">Автор: <a href="{{ url_for('profile', username=author) }}">{{author}}</a></p>
                 <p>От {{created.strftime('%d-%m-%Y')}}</p>
-                <p class="annonce">{{ (body | striptags) }}</p>
+                <p class="annonce">💬 {{ (body | striptags) }}</p>
             </td>
             {% if g.user['id'] == author_id %}
             <td>
-                <a href="{{ url_for('feed.update_feedback', feedback_id=feedback_id) }}">Редактировать/Удалить</a>
+                <a class="new" href="{{ url_for('feed.update_feedback', feedback_id=feedback_id) }}">Редактировать/Удалить</a>
             </td>
             {% endif %}
         </tr>

@@ -49,22 +49,63 @@
               </tr>
           </table>
 
-            <table class="review">
-              <tr>
-                  {% if rest_id == 1 %}
-                <td class="g1"><img src="/static/images/gourmand1.jpg" class="g1"></td>
-                  {% elif rest_id == 2 %}
-                  <td class="a1"><img src="/static/images/alaverdi1.jpg" class="a1"></td>
-                  {% elif rest_id == 3 %}
-                  <td class="h1"><img src="/static/images/heart_of_batumi1.jpg" class="a1"></td>
-                  {% elif rest_id == 4 %}
-                  <td class="m1"><img src="/static/images/panorama1.jpg" class="m1"></td>
-                  {% elif rest_id == 5 %}
-                  <td class="a1"><img src="/static/images/tavaduri1.jpg" class="t1"></td>
-                  {% elif rest_id == 6 %}
-                  <td class="m1"><img src="/static/images/mangal1.jpg" class="m1"></td>
-                  {% endif %}
+            <table class="review" cellspacing="0" cellpadding="4">
+
+                {% if rest_id == 1 %}
+                <tr>
+                    <td rowspan="2" class="g1"><img src="/static/images/gourmand1.jpg" class="g1"></td>
+                    <td colspan="3" class="g2"><img src="/static/images/gourmand2.jpeg" class="g1"></td>
+                </tr>
+                <tr>
+                  <td class="g3"><img src="/static/images/gourmand3.jpg" class="g1"></td>
+                  <td class="g3"><img src="/static/images/gourmand4.jpg" class="g1"></td>
+                  <td class="g3"><img src="/static/images/gourmand5.jpg" class="g1"></td>
               </tr>
+
+                  {% elif rest_id == 2 %}
+                <tr>
+                    <td rowspan="2" class="a1"><img src="/static/images/alaverdi1.jpg" class="g1"></td>
+                    <td rowspan="2" class="a2"><img src="/static/images/alaverdi2.jpg" class="g1"></td>
+                    <td class="a3"><img src="/static/images/alaverdi3.jpg" class="g1"></td>
+                    <td class="a3"><img src="/static/images/alaverdi4.jpg" class="g1"></td>
+                </tr>
+                <tr>
+                    <td class="a3"><img src="/static/images/alaverdi5.jpg" class="g1"></td>
+                    <td class="a3"><img src="/static/images/alaverdi6.jpg" class="g1"></td>
+                </tr>
+
+                  {% elif rest_id == 3 %}
+                <tr>
+                    <td class="h1"><img src="/static/images/heart_of_batumi1.jpg" class="h1"></td>
+                    <td class="h2"><img src="/static/images/heart_of_batumi2.jpg" class="h1"></td>
+                    <td class="h3"><img src="/static/images/heart_of_batumi3.jpg" class="h1"></td>
+                </tr>
+
+                  {% elif rest_id == 4 %}
+                <tr>
+                    <td class="p1"><img src="/static/images/panorama1.jpg" class="p1"></td>
+                    <td class="p2"><img src="/static/images/panorama2.jpg" class="p1"></td>
+                    <td class="g1"><img src="/static/images/panorama3.jpg" class="p2"></td>
+                </tr>
+
+                  {% elif rest_id == 5 %}
+                <tr>
+                    <td rowspan="2" class="t1"><img src="/static/images/tavaduri1.jpg" class="t1"></td>
+                    <td rowspan="2" class="p2"><img src="/static/images/tavaduri2.jpg" class="t2"></td>
+                    <td class="t2"><img src="/static/images/tavaduri3.jpg" class="t3"></td>
+                </tr>
+                <tr>
+                   <td class="t3"><img src="/static/images/tavaduri4.jpg" class="t3"></td>
+                </tr>
+
+                  {% elif rest_id == 6 %}
+                <tr>
+                    <td class="p1"><img src="/static/images/mangal1.jpg" class="p1"></td>
+                    <td class="p2"><img src="/static/images/mangal2.jpg" class="p1"></td>
+                    <td class="m1"><img src="/static/images/mangal3.jpg" class="p2"></td>
+                </tr>
+                  {% endif %}
+
           </table>
 
             {% if rest_id == 1 %}
@@ -117,25 +158,24 @@
             <p class="contacts"><u>Контакты:</u>
              {% if rest_id == 1 %}
                 <p class="contacts">+995 514 68 06 80</p>
-            <a href="https://www.facebook.com/eat.naturalgourmand">Веб-сайт</a>
+                <a href="https://www.facebook.com/eat.naturalgourmand">Веб-сайт</a>
             {% elif rest_id == 2 %}
-            <p class="contacts"> +995 555 77 36 36</p>
-              <a href="https://www.facebook.com/Alaverdi.Restaurant.Batumi">Веб-сайт</a>
+                <p class="contacts"> +995 555 77 36 36</p>
+                <a href="https://www.facebook.com/Alaverdi.Restaurant.Batumi">Веб-сайт</a>
             {% elif rest_id == 3 %}
-            <p class="contacts"> +995 568 94 05 15</p>
-              <a href="https://heart-of-batumi-georgian-restaurant.business.site/">Веб-сайт</a>
+                <p class="contacts"> +995 568 94 05 15</p>
+                <a href="https://heart-of-batumi-georgian-restaurant.business.site/">Веб-сайт</a>
             {% elif rest_id == 4 %}
-            <p class="contacts">  +995 598 42 42 42</p>
-              <a href="https://ginza.ru/batumi/restaurant/panorama">Веб-сайт</a>
+                <p class="contacts">  +995 598 42 42 42</p>
+                <a href="https://ginza.ru/batumi/restaurant/panorama">Веб-сайт</a>
             {% elif rest_id == 5 %}
-            <p class="contacts"> +995 593 31 36 11</p>
-              <a href="https://www.facebook.com/tavaduribatumii/">Веб-сайт</a>
+                <p class="contacts"> +995 593 31 36 11</p>
+                <a href="https://www.facebook.com/tavaduribatumii/">Веб-сайт</a>
             {% elif rest_id == 6 %}
-            <p class="contacts">  +995 555 00 02 85</p>
+                <p class="contacts">  +995 555 00 02 85</p>
             {% endif %}
 
         </main>
-
         <footer>
             <p class="footer">Автор: Полина Кириченко</p>
         </footer>
