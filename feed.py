@@ -1,5 +1,5 @@
 from flask import Blueprint, request, flash, render_template, redirect, url_for, g
-from flask_login import login_required, current_user
+from flask_login import login_required
 from FDataBase import FDataBase
 from db import get_db
 

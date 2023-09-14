@@ -20,14 +20,20 @@ CREATE TABLE IF NOT EXISTS feedbacks
     FOREIGN KEY (rest_id) REFERENCES restaurants (id)
 );
 
+DROP TABLE restaurants;
 CREATE TABLE IF NOT EXISTS restaurants
 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title text UNIQUE NOT NULL,
-    picture BLOB DEFAULT NULL,
-    url text NOT NULL
+    url text UNIQUE NOT NULL
 );
 
 
+INSERT OR IGNORE INTO restaurants(title, url)  VALUES ('Гурман', 'gourmand'),
+('Алаверди', 'alaverdi'),
+('Сердце Батуми', 'heart_of_batumi'),
+('Panorama', 'panorama'),
+('Тавадури', 'tavaduri'),
+('Мангал', 'mangal');
 
 
