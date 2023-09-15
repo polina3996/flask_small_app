@@ -41,7 +41,7 @@ def create_app(test_config=None):
     @login_manager.user_loader
     def load_user(user_id):
         """Runs a database query that will put the target user in the database session"""
-        return UserLogin().fromDB(user_id, FDataBase(db.get_db()))  # int(user_id)??
+        return UserLogin().fromDB(user_id, FDataBase(db.get_db()))
 
     @app.before_request
     def before_request():

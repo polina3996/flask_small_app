@@ -20,7 +20,6 @@ CREATE TABLE IF NOT EXISTS feedbacks
     FOREIGN KEY (rest_id) REFERENCES restaurants (id)
 );
 
-DROP TABLE restaurants;
 CREATE TABLE IF NOT EXISTS restaurants
 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
