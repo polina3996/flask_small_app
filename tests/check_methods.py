@@ -11,8 +11,18 @@ def check_status_code_302_get(client, url):
     assert response.status_code == 302
 
 
+def check_status_code_302_post(client, url):
+    response = client.post(url)
+    assert response.status_code == 302
+
+
 def check_content_text_type_get(client, url):
     response = client.get(url)
+    assert response.content_type == 'text/html; charset=utf-8'
+
+
+def check_content_text_type_post(client, url):
+    response = client.post(url)
     assert response.content_type == 'text/html; charset=utf-8'
 
 
@@ -35,6 +45,26 @@ def check_login_required_get(app, client, url):
         resp = make_response(response)
         # redirects to login page
         assert '/login' in resp.headers["Location"]
+
+
+def check_profile_redirection_get(app, client, url):
+    # creating the app context
+    with app.app_context():
+        response = client.get(url)
+        # converting to response object
+        resp = make_response(response)
+        # redirects to login page
+        assert '/profile' in resp.headers["Location"]
+
+
+def check_profile_redirection_post(app, client, url):
+    # creating the app context
+    with app.app_context():
+        response = client.post(url)
+        # converting to response object
+        resp = make_response(response)
+        # redirects to login page
+        assert '/profile' in resp.headers["Location"]
 
 
 def check_nonauth_menu_get(client, url):

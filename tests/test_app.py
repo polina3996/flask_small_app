@@ -1,11 +1,10 @@
 import random
 import sys
 import pytest
-from flask import make_response
 from app import create_app
 from check_methods import check_status_code_200_get, check_content_text_type_get, check_nonauth_menu_get, \
     check_index_data_get, check_rest_data_get, check_nonexist_rest_get, check_status_code_302_get, \
-    check_login_required_get
+    check_login_required_get, check_profile_redirection_get
 
 
 def test_config():
@@ -66,6 +65,7 @@ def test_profile(app, client, username):
     check_login_required_get(app, client, f'/profile/{username}')
 
     # logged in
+    # auth.login()
     # check_status_code_200_get(client, f'/profile/{username}')
     # check_content_text_type_get(client, f'/profile/{username}')
     # check_profile_auth_data_get(client, f'/profile/{username}')
@@ -79,6 +79,7 @@ def test_userava_exists(app, client, username):
     check_login_required_get(app, client, f'/profile/{username}')
 
     # logged in
+    # auth.login()
     # check_status_code_200_get(client, f'/userava/{username}')
     # check_content_image_type_get(client, f'/userava/{username}')
 
@@ -92,12 +93,29 @@ def test_profile_and_userava_nonexists(app, client, username=random.random()):
     check_login_required_get(app, client, f'/profile/{username}')
 
     # logged in
+    # auth.login()
     # check_status_code_200_get(client, f'/profile/{username}')
     # check_content_text_type_get(client, f'/profile/{username}')
     # check_auth_menu_get(client, '/index')
     # check_index_data_get(client)
 
 
+def test_upload(app, client):
+    """Test of the uploading of the user's avatar method: non logged in -> only GET-request and redirection to login page;
+    logged in -> GET-request redirects to profile page; POST-request also redirects to profile page"""
+    # non logged in(GET)
+    check_status_code_302_get(client, f'/upload')
+    check_content_text_type_get(client, f'/upload')
+    check_login_required_get(app, client, f'/upload')
 
+    # logged in(GET)
+    # auth.login()
+    # check_status_code_302_get(client, f'/upload')
+    # check_content_text_type_get(client, f'/upload')
+    # check_profile_redirection_get(app, client, f'/upload')
 
-
+    # logged in(POST)
+    # auth.login()
+    # check_status_code_302_post(client, f'/upload')
+    # check_content_text_type_post(client, f'/upload')
+    # check_profile_redirection_post(app, client, f'/upload')
