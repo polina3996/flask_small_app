@@ -66,9 +66,11 @@ div.content {
 	margin: 10px;
 }
 
-div.form-contact label {
+form.form-contact label {
 	display: inline-block;
 	min-width: 80px;
+	color: Brown;
+	font-size: 20px;
 }
 div.form-contact p {
     margin: 10px 0 10px 0;
@@ -321,11 +323,21 @@ ul.list-posts .annonce {
 	width: auto;
 	height: auto;
 	text-align: center;
-	overflow: hidden;;
+	overflow: hidden;
 }
 .profile-ava img {
     width: auto;
     height: auto;
+}
+.main-ava {
+	width: 300px;
+	height: 300px;
+	text-align: center;
+	overflow: hidden;
+	}
+.main-ava img {
+    width: 300px;
+    height: 300px;
 }
 
 .profile-load {

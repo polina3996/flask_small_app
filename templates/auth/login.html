@@ -19,27 +19,16 @@
                 <div class="flash {{cat}}">{{msg}}</div>
             {% endfor %}
 
-            <form action="" method="post" class="form-contact">
-                {{ form.hidden_tag() }}
-
-                {% for field in form if field.name not in ['csrf_token', 'remember', 'submit'] -%}
-                    <p> {{ field.label() }}
-                    {% if field.errors %}
-                        {{ field(class="invalid") }}
-                        <span class="invalid-feedback">
-                        {% for e in field.errors %}
-                            {{ e }}
-                        {% endfor %}
-                        </span>
-                    {% else %}
-                        {{ field() }}
-                    {% endif %}
-                {% endfor %}
-
-                <p> {{ form.remember.label() }} {{ form.remember()  }}
-                <p> {{ form.submit() }}</p>
-                <p>Ещё не <a href="{{url_for('auth.register')}}">зарегистрированы?</a></p>
+            {% block content %}
+            <form method="post" class="form-contact">
+            <div><label for="username">Введите имя пользователя: </label>
+                <input name="username" id="username" required></div><br>
+            <div><label for="password">Введите пароль:</label>
+                <input type="password" name="password" id="password" required></div><br>
+            <input type="submit" value="Войти">
             </form>
+            {% endblock %}
+
         </main>
         <footer>
             <p class="footer">Автор: Полина Кириченко</p>

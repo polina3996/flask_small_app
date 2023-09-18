@@ -22,7 +22,7 @@
     <table border="0" class="profile-table">
         <tr>
             <td valign="top">
-                <div class="profile-ava"><img src="{{ url_for('userava', username=user['username']) }}"></div>
+                <div class="main-ava"><img src="{{ url_for('userava', username=user['username']) }}"></div>
                 {% if g.user['id'] == user['id']%}
                     <div class="profile-load">
                         <form action="{{url_for('upload')}}" method="POST" enctype="multipart/form-data">

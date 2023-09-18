@@ -4,7 +4,7 @@ import pytest
 from app import create_app
 from check_methods import check_status_code_200_get, check_content_text_type_get, check_nonauth_menu_get, \
     check_index_data_get, check_rest_data_get, check_nonexist_rest_get, check_status_code_302_get, \
-    check_login_required_get, check_profile_redirection_get
+    check_login_required_get, check_profile_redirection_get, check_auth_menu_get
 
 
 def test_config():
@@ -16,7 +16,7 @@ def test_config():
 
 
 def test_index(client, auth):
-    """Test of main page: the differences between logged and non-logged in are only in mainmemu"""
+    """Test of index handlere: the differences between logged and non-logged in are only in mainmemu"""
     # non logged in
     check_status_code_200_get(client, '/index')
     check_content_text_type_get(client, '/index')
@@ -29,11 +29,11 @@ def test_index(client, auth):
     # check_content_text_type_get(client, '/index')
     # check_auth_menu_get(client, '/index')
     # check_index_data_get(client)
-
+    #
 
 @pytest.mark.parametrize('rest_id', [1, 2, 3, 4, 5, 6])
 def test_restaurant(client, rest_id):
-    """Test of any of restaurant pages: the differences between logged and non-logged in are only in mainmemu"""
+    """Test of restaurant handler: the differences between logged and non-logged in are only in mainmemu"""
     # non logged in
     check_status_code_200_get(client, f'/restaurant/{rest_id}')
     check_content_text_type_get(client, f'/restaurant/{rest_id}')
@@ -49,7 +49,7 @@ def test_restaurant(client, rest_id):
 
 
 def test_restaurant_nonexists(client, rest_id=sys.maxsize):
-    """Test of the page when restaurant doesn't exist: returns 404 page not found"""
+    """Test case when restaurant doesn't exist: returns 404 page not found"""
     check_status_code_200_get(client, f'/restaurant/{rest_id}')
     check_content_text_type_get(client, f'/restaurant/{rest_id}')
     check_nonexist_rest_get(client, f'/restaurant/{rest_id}')
@@ -57,7 +57,7 @@ def test_restaurant_nonexists(client, rest_id=sys.maxsize):
 
 @pytest.mark.parametrize('username', ['test_name', 'test_username'])
 def test_profile(app, client, username):
-    """Test of the profile page: the differences between logged and non-logged in are redirection to login to see the
+    """Test of the profile handler: the differences between logged and non-logged in are redirection to login to see the
     PROFILE page """
     # non logged in
     check_status_code_302_get(client, f'/profile/{username}')
@@ -73,6 +73,8 @@ def test_profile(app, client, username):
 
 @pytest.mark.parametrize('username', ['test_name', 'test_username'])
 def test_userava_exists(app, client, username):
+    """Test of the user's avatar handler: the differences between logged and non-logged in are redirection to login
+     to see the IMAGE"""
     # non logged in
     check_status_code_302_get(client, f'/profile/{username}')
     check_content_text_type_get(client, f'/profile/{username}')
@@ -85,7 +87,7 @@ def test_userava_exists(app, client, username):
 
 
 def test_profile_and_userava_nonexists(app, client, username=random.random()):
-    """Test of the profile and userava pages that don't exist: the differences between logged and non-logged in are redirection to
+    """Test cases when profile and userava don't exist: the differences between logged and non-logged in are redirection to
     login to see the INDEX page """
     # non logged in
     check_status_code_302_get(client, f'/profile/{username}')
@@ -101,7 +103,7 @@ def test_profile_and_userava_nonexists(app, client, username=random.random()):
 
 
 def test_upload(app, client):
-    """Test of the uploading of the user's avatar method: non logged in -> only GET-request and redirection to login page;
+    """Test of the upload handler: non logged in -> only GET-request and redirection to login page;
     logged in -> GET-request redirects to profile page; POST-request also redirects to profile page"""
     # non logged in(GET)
     check_status_code_302_get(client, f'/upload')
