@@ -17,16 +17,15 @@
               {% endif %}
       </ul>
     {%- endblock mainmenu -%}
+    {% for cat, msg in get_flashed_messages(True) %}
+                <div class="flash {{cat}}">{{msg}}</div>
+            {% endfor %}
     {% block title -%}
         <header><h1 class="review">Лучшие рестораны Батуми</h1>
             <img src="/static/images/index_main.jpg" class="review">
             {% endblock %}
 
         <main>
-            {% for cat, msg in get_flashed_messages(True) %}
-                <div class="flash {{cat}}">{{msg}}</div>
-            {% endfor %}
-
             <table class="review">
               <tr>
                   <th><u><a href="{{ url_for('restaurant', rest_id=1) }}">Гурман</a></u></th>

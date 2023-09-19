@@ -93,22 +93,22 @@ def create_app(test_config=None):
         if not user:
             flash('Пользователь не найден', category='error')
             return render_template('index.html')
-        if user:
+        else:
             img = None
             if not user['avatar']:
                 try:
-                    with open('static/images/default.png', 'rb') as f:
+                    # with open('static/images/default.png', 'rb') as f:
+                    with app.open_resource(app.root_path + url_for('static', filename='images/default.png'), 'rb') as f:
                         img = f.read()
                 except FileNotFoundError as e:
                     print('Не найден аватар по умолчанию: ' + str(e))
-            else:
+            else: # a user has already uploaded his ava
                 img = user['avatar']
+            if img is None:
+                return ""
             h = make_response(img)
             h.headers['Content-Type'] = 'image/png'
             return h
-        else:
-            flash('Аватарка не найдена, так как пользователя не существует', category='error')
-            return redirect(url_for('index'))
 
     @app.route('/upload', methods=['POST', 'GET'])
     @login_required
@@ -122,7 +122,8 @@ def create_app(test_config=None):
                     res = FDataBase(db.get_db()).update_user_avatar(img, session['user_id'])
                     if not res:
                         flash('Ошибка обновления аватара', 'error')
-                    flash('Аватар обновлен', 'success')
+                    else:
+                        flash('Аватар обновлен', 'success')
                 except FileNotFoundError:
                     flash('Ошибка чтения файла', 'error')
             else:

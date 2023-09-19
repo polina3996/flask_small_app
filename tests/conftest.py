@@ -10,7 +10,8 @@ with open(os.path.join(os.path.dirname(__file__), 'data.sql'), mode='rb') as f:
 
 @pytest.fixture
 def app():
-    """Fixture for the app(generator-function): creates the database and its tables, inserts test data"""
+    """Fixture for the app: creates the database and its tables, inserts test data; calls the factory and passes
+    test_config to configure the application and database for testing """
     # file descriptor and path to the TEMPORARY file
     db_fd, db_path = tempfile.mkstemp()
 
@@ -51,19 +52,14 @@ class AuthActions(object):
         # client-fixture
         self._client = client
 
-    def login(self, username='test_name', psw='test'):
-        # form.username.data = 'test_name'
-        # form.psw.data = 'test'
-        return self._client.post('auth/login', data={'username': username,
-                                                     'password': psw})
+    def login(self, username='test_name', password='test'):
+        return self._client.post('/login', data={'username': username, 'password': password})
 
     def logout(self):
-        return self._client.get('auth/logout')
+        return self._client.get('/logout')
 
 
 @pytest.fixture
 def auth(client):
     """Sends a class with its methods to each test"""
     return AuthActions(client)
-
-

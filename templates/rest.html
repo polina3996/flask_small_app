@@ -9,7 +9,7 @@
      <ul class="mainmenu">
           <li><a href="{{ url_for('index') }}">Главная</a>
               {% if current_user.is_authenticated %}
-            <li><span class="username"><a href="{{ url_for('profile', username=g.user.username) }}">{{ g.user.username }}</a></span>
+            <li class="username"><a href="{{ url_for('profile', username=g.user.username) }}">{{g.user.username}}</a></li>
             <li><a href="{{ url_for('auth.logout') }}">Выйти</a>
           {% else %}
             <li><a href="{{ url_for('auth.login') }}">Авторизация</a>
