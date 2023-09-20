@@ -72,18 +72,6 @@ def register():
     # error or GET-request(non logged in)
     return render_template('auth/register.html')
 
-    # form = RegisterForm()
-    #
-    # if form.validate_on_submit():
-    #     res = FDataBase(get_db()).add_user(form.username.data, form.email.data, generate_password_hash(form.psw.data))
-    #     if res:
-    #         flash('Вы успешно зарегистрированы', category='success')
-    #         return redirect(url_for('auth.login'))
-    #     else:
-    #         flash('Это имя или почта уже заняты', category='error')
-    # # error or GET-request(non logged in)
-    # return render_template('auth/register.html', form=form)
-
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -115,25 +103,6 @@ def login():
             flash(error, category='error')
     # error or GET-request(non logged in)
     return render_template('auth/login.html')
-
-    #
-    # # if request.method is POST
-    # form = LoginForm()
-    #
-    # if form.validate_on_submit():
-    #     user = FDataBase(get_db()).get_user_by_name(form.username.data)
-    #     if not user:
-    #         flash('Пользователь не найден', category='error')
-    #         return render_template('auth/login.html', form=form)
-    #     if user and check_password_hash(user['password'], form.psw.data):
-    #         session.clear()
-    #         session['user_id'] = user['id']
-    #         login_user(UserLogin().create(user), remember=form.remember.data)
-    #         flash(f'Добро пожаловать, {form.username.data}!', category='success')
-    #         return redirect(request.args.get('next') or url_for('profile', username=user['username']))
-    #     flash('Неверная пара логин/пароль', category='error')
-    # # if request.method is GET or if there occurred some errors
-    # return render_template('auth/login.html', form=form)
 
 
 @auth.route('/logout')

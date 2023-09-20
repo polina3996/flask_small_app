@@ -169,7 +169,7 @@ def check_login_data_post(client, auth):
     response = auth.login()
     assert "/profile" in response.headers["Location"]
 
-    # allows accessing context variables such as session after the response is returned. Normally,
+    # !!!allows accessing context variables such as session after the response is returned. Normally,
     # accessing session outside of a request would raise an error.
     with client:
         client.get('/')
@@ -203,3 +203,4 @@ def check_logout_data_get(auth, client, url):
         client.get('/')
         assert g.user is None
         assert 'user_id' not in session
+
