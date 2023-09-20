@@ -49,16 +49,16 @@ def register():
 
         if not username:
             error = 'Username is required'
-        if not 4 <= len(username) <= 100:
+        elif not 4 <= len(username) <= 100:
             error = 'Name length should be from 4 to 100 symbols'
-        if '@' not in email:
+        elif '@' not in email:
             error = 'Invalid email'
-        if not password:
+        elif not password:
             error = 'Password is required'
-        if not 4 <= len(password) <= 100:
+        elif not 4 <= len(password) <= 100:
             error = 'Password length should be from 4 to 100 symbols'
-        if password != password2:
-            error = "Passwords don't match"
+        elif password != password2:
+            error = "Passwords dont match"
 
         if error is None:
             res = FDataBase(get_db()).add_user(username, email, generate_password_hash(password))
@@ -88,9 +88,11 @@ def register():
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     """Authorization page handler"""
+    # GET-request(logged in)
     if current_user.is_authenticated:
         return redirect(url_for('profile', username=g.user['username']))
 
+    # POST-request(non logged in)
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -100,7 +102,7 @@ def login():
         user = FDataBase(get_db()).get_user_by_name(username)
         if not user:
             error = 'Incorrect username.'
-        if not check_password_hash(user['password'], password):
+        elif not check_password_hash(user['password'], password):
             error = 'Incorrect password.'
 
         if error is None:
@@ -111,6 +113,7 @@ def login():
             return redirect(request.args.get('next') or url_for('profile', username=user['username']))
         else:
             flash(error, category='error')
+    # error or GET-request(non logged in)
     return render_template('auth/login.html')
 
     #

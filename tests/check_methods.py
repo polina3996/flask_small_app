@@ -1,5 +1,4 @@
-from flask import make_response
-
+from flask import make_response, session, g
 from db import get_db
 from FDataBase import FDataBase
 
@@ -67,7 +66,6 @@ def check_profile_redirection_get(app, client, url):
         assert '/profile' in resp.headers["Location"]
 
 
-
 def check_nonauth_menu_get(client, url):
     response = client.get(url)
     assert b'a href="/index"' in response.data
@@ -128,58 +126,80 @@ def check_registration_data_get(client, url):
     response = client.get(url)
     check_nonauth_menu_get(client, url)
     assert b'h1 class="login"' in response.data
-    assert b'form action="/register" method="post"' in response.data
+    assert b'form method="post" class="form-contact' in response.data
     assert b'label for="username"' in response.data
-    assert b'input id="username"' in response.data
+    assert b'input name="username"' in response.data
     assert b'label for="email"' in response.data
-    assert b'input id="email"' in response.data
-    assert b'label for="psw"' in response.data
-    assert b'input id="psw"' in response.data
-    assert b'label for="psw2"' in response.data
-    assert b'input id="psw2"' in response.data
-    assert b'input id="submit"' in response.data
+    assert b'input type="email" ' in response.data
+    assert b'label for="password"' in response.data
+    assert b'input type="password"' in response.data
+    assert b'label for="password2"' in response.data
+    assert b'input type="password2"' in response.data
+    assert b'input type="submit"' in response.data
+
+
+def check_login_data_get(client, url):
+    response = client.get(url)
+    check_nonauth_menu_get(client, url)
+    assert b'h1 class="login"' in response.data
+    assert b'form method="post" class="form-contact' in response.data
+    assert b'label for="username"' in response.data
+    assert b'input name="username"' in response.data
+    assert b'label for="password"' in response.data
+    assert b'input type="password"' in response.data
+    assert b'input type="submit"' in response.data
+    assert b'input type="email"' not in response.data
+    assert b'input type="password2"' not in response.data
 
 
 def check_registration_data_post(app, client, url):
-    with app.test_request_context(url, method='POST'):
-        #form = RegisterForm(username='aaaa', email='aaaa@gmail.com', psw='12345', psw2='12345')
-        # POST-request, converting the *data-dictionary into form-data.
-        # data contains the body of the response as bytes. If you expect a certain value to render on the page,
-        # check that it’s in data. Bytes must be compared to bytes. If you want to compare text, use
-        # get_data(as_text=True) instead.
-        name = bytes('aaaa', 'utf-8')
-        em = bytes('aaaa@gmail.com', 'utf-8')
-        passw = bytes('12345', 'utf-8')
-        # response = client.post(url, data={request.form["username"]: name,
-        #                                   request.form["email"]: em,
-        #                                   request.form["psw"]: passw,
-        #                                   request.form["psw2"]: passw
-        #                                   })
-        # client.post(url, data={"username": "shdskhkh",
-        #                        "email": "shddjs@gmail.com",
-        #                        "psw":"12636",
-        #                        "psw2":"12636"}
-        #             )
-        response = client.post(url, data={f'username': name,
-                                          f'email': em,
-                                          f'psw': passw,
-                                          f'psw2': passw}, follow_redirects=True)
-        # response = client.post(url)
-        # response.get_data(as_text={f'{form.username.data}': 'aaaa',
-        #                    f'{form.email.data}': 'aaaa@gmail.com',
-        #                    f'{form.psw.data}': '12345',
-        #                    f'{form.psw2.data}': '12345'
-        #                    })
-        # with app.app_context():
-        #resp = make_response(response)
-        assert response.headers["Location"] == '/login'
-        assert FDataBase(get_db()).get_user_by_name(name)
+    response = client.post(url, data={'username': 'aaaa',
+                                      'email': 'sakd@kfsf',
+                                      'password': 'aaaa',
+                                      'password2': 'aaaa'}
+                           )
+    assert response.headers["Location"] == "/login"
+
+    with app.app_context():
+        assert FDataBase(get_db()).get_user_by_name('aaaa')
 
 
-# def check_validate_register(client, url, ):
-#     response = client.post('/register', data={'username': username, 'password': password}
-#         )
-#         assert message in response.data
+def check_login_data_post(client, auth):
+    # logs in with 'test_name' and 'test' data
+    response = auth.login()
+    assert "/profile" in response.headers["Location"]
 
-# assert b'' in response.data
+    # allows accessing context variables such as session after the response is returned. Normally,
+    # accessing session outside of a request would raise an error.
+    with client:
+        client.get('/')
+        assert session['user_id'] == 1
+        assert g.user is not None
+        assert g.user['username'] == 'test_name'
 
+
+def check_validate_register(client, url, username, email, password, password2, message):
+    response = client.post(url, data={'username': username,
+                                      'email': email,
+                                      'password': password,
+                                      'password2': password2}
+                           )
+    assert message in response.data
+
+
+def check_validate_login(auth, username, password, message):
+    response = auth.login(username, password)
+    assert message in response.data
+
+
+def check_logout_data_get(auth, client, url):
+    response = auth.logout()
+    # redirects to '/index' only at the 1st logout -> the order of methods is important
+    assert '/index' in response.headers["Location"]
+    check_status_code_302_get(client, url)
+    check_content_text_type_get(client, url)
+
+    with client:
+        client.get('/')
+        assert g.user is None
+        assert 'user_id' not in session
