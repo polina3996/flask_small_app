@@ -204,3 +204,66 @@ def check_logout_data_get(auth, client, url):
         assert g.user is None
         assert 'user_id' not in session
 
+
+def check_leave_feedback_data_get(client, url):
+    response = client.get(url)
+    check_auth_menu_get(client, url)
+    assert b'a class="leave"' in response.data
+    assert b'form action="/leave_feedback' in response.data
+    assert b'label for="title"' in response.data
+    assert b'input id="title"' in response.data
+    assert b'label for="body"' in response.data
+    assert b'textarea id="body"' in response.data
+    assert b'input type="submit"' in response.data
+
+
+def check_feedback_data_get(client, url):
+    response = client.get(url)
+    check_auth_menu_get(client, url)
+    assert b'img class="feedback"' in response.data
+    assert b'p class="none"' in response.data
+    assert b'a href="/restaurant' in response.data
+    assert b'a href="/profile/' in response.data
+    assert b'p class="annonce"' in response.data
+
+
+def check_update_feedback_data_get(client, url):
+    response = client.get(url)
+    check_auth_menu_get(client, url)
+    assert b'a class="leave" href="/feedback' in response.data
+    assert b'a class="leave" href="/restaurant' in response.data
+    assert b'form action="/update_feedback' in response.data
+    assert b'label for="title"' in response.data
+    assert b'input id="title"' in response.data
+    assert b'label for="body"' in response.data
+    assert b'textarea id="body"' in response.data
+    assert b'input type="submit"' in response.data
+    assert b'form action="/delete_feedback' in response.data
+    assert b'input class="danger" type="submit"' in response.data
+    assert b'onclick="return confirm' in response.data
+
+
+def check_leave_feedback_data_post(client, url, app):
+    response = client.post(url, data={'title': 'New feedback',
+                                      'body': 'This is a new feedback'}
+                           )
+    assert '/all_feedbacks/restaurant' in response.headers["Location"]
+
+    with app.app_context():
+        # 1 feedback already exists in the database
+        assert FDataBase(get_db()).get_feedback(2)
+
+    # assert b'' in response.data
+    # assert b'' in response.data
+
+
+def check_update_feedback_data_post(app, client, url):
+    response = client.post(url, data={'title': 'updated',
+                                      'body': 'updated feedback'}
+                           )
+    assert '/update_feedback' in response.headers["Location"]
+
+    with app.app_context():
+        feedback = FDataBase(get_db()).get_feedback(1)
+        assert feedback['title'] == 'updated'
+        assert feedback['body'] == 'updated feedback'

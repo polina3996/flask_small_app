@@ -18,7 +18,7 @@ def leave_feedback(rest_id):
                 flash('Ошибка добавления отзыва', category='error')
             else:
                 flash('Отзыв добавлен успешно', category='success')
-                return redirect(url_for('index'))
+                return redirect(url_for('feed.all_feedbacks', rest_id=rest_id))
         else:
             flash('Ошибка ввода отзыва, он слишком короткий', category='error')
     # if request method is 'GET'
