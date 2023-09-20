@@ -40,6 +40,14 @@ def test_add_true_user(app, username, email, hpsw):
         assert dbase.get_user_by_name(username)
 
 
+def test_get_user(client, username='test_name', email='test@gmail.com', hpsw='f2f'):
+    with client:
+        client.get('/')
+        dbase = FDataBase(get_db())
+        dbase.add_user(username, email, hpsw)
+        assert dbase.get_user(1)
+
+
 @pytest.mark.parametrize('username', ['test_name', 'test_username'])
 def test_get_user_by_name(app, username):
     with app.app_context():
