@@ -91,6 +91,9 @@ def test_get_feedbacks_of_a_restaurant(auth, client, rest_id, title='Test Feedba
         dbase = FDataBase(get_db())
         dbase.add_feedback(title, body, rest_id)
         assert dbase.get_feedbacks_of_a_restaurant(rest_id) != []
+        # assert dbase.get_feedback(1)['title'] == 'test title'
+        # assert dbase.get_feedback(2)['title'] == 'Test Feedback'
+
 
 
 def test_update_my_feedback(auth, client, feedback_id=1, new_title='New Title', new_body='This is a new body',

@@ -267,3 +267,21 @@ def check_update_feedback_data_post(app, client, url):
         feedback = FDataBase(get_db()).get_feedback(1)
         assert feedback['title'] == 'updated'
         assert feedback['body'] == 'updated feedback'
+
+
+def check_delete_feedback_data_post(app, client, url):
+    response = client.post(url)
+    assert response.headers["Location"] == "/index"
+
+    with app.app_context():
+        feedback = FDataBase(get_db()).get_feedback(1)
+        assert not feedback
+
+
+def check_all_feedbacks_data_get(client, url):
+    response = client.get(url)
+    check_auth_menu_get(client, url)
+    assert b'h2' in response.data
+    assert b'a href="/restaurant' in response.data
+    assert b'a class="new" href="/leave_feedback' in response.data
+
