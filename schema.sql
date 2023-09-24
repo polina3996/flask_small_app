@@ -35,4 +35,3 @@ INSERT OR IGNORE INTO restaurants(title, url)  VALUES ('Гурман', 'gourmand
 ('Тавадури', 'tavaduri'),
 ('Мангал', 'mangal');
 
-

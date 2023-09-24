@@ -46,12 +46,18 @@ def create_app(test_config=None):
     @app.before_request
     def before_request():
         """Sets the time a user was last seen in an application"""
-        if current_user.is_authenticated:
-            try:
-                db.get_db().execute(f'''UPDATE users SET visit = ? WHERE id = ?''', (datetime.utcnow(), g.user['id']))
-                db.get_db().commit()
-            except sqlite3.Error as e:
-                print('Ошибка обновления отзыва в БД: ' + str(e))
+        if current_user:
+            if current_user.is_authenticated:
+                try:
+                    if g.user:
+                        db.get_db().execute(f'''UPDATE users SET visit = ? WHERE id = ?''', (datetime.utcnow(), g.user['id']))
+                        db.get_db().commit()
+                    else:
+                        pass
+                except sqlite3.Error as e:
+                    print('Ошибка обновления отзыва в БД: ' + str(e))
+
+
             # current_user.visit = datetime.utcnow() # отображает всегда меня. на стр др юзера - надо его!!
             # db.get_db().commit()
 
