@@ -1,4 +1,7 @@
-click~=8.1.7
-flask~=2.3.3
-pytest~=7.4.2
-werkzeug~=2.3.7
+pytest==7.4.0s
+flask
+werkzeug
+flask_login
+click
+
+
