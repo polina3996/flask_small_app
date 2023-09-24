@@ -252,9 +252,8 @@ def check_leave_feedback_data_post(client, url, app):
     with app.app_context():
         # 1 feedback already exists in the database
         assert FDataBase(get_db()).get_feedback(2)
-
-    # assert b'' in response.data
-    # assert b'' in response.data
+        assert FDataBase(get_db()).get_feedback(2)['title'] == 'New feedback'
+        assert FDataBase(get_db()).get_feedback(2)['body'] == 'This is a new feedback'
 
 
 def check_update_feedback_data_post(app, client, url):
