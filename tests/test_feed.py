@@ -1,6 +1,6 @@
 import pytest
 
-from tests.check_methods import check_status_code_200_get, check_content_text_type_get, check_auth_menu_get, \
+from check_methods import check_status_code_200_get, check_content_text_type_get, check_auth_menu_get, \
     check_leave_feedback_data_get, check_leave_feedback_data_post, check_status_code_302_get, check_login_required_get, \
     check_404_get, check_feedback_data_get, check_update_feedback_data_get, check_update_feedback_data_post, \
     check_delete_feedback_data_post, check_all_feedbacks_data_get
